@@ -1,0 +1,54 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Install DEV environment",
+            "type": "shell",
+            "command": "rm -rf .env && python -m venv .env && source .env/bin/activate && python -m pip install --upgrade pip && python -m pip install -r requirements-dev.txt",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Install PROD environment",
+            "type": "shell",
+            "command": "rm -rf .env && python -m venv .env && source .env/bin/activate && python -m pip install --upgrade pip && python -m pip install -r requirements.txt",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Dev - Code formatter",
+            "type": "shell",
+            "command": "source .env/bin/activate && black git_search.py",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Dev - Code Analysis",
+            "type": "shell",
+            "command": "source .env/bin/activate && pylint `ls -R|grep .py$|xargs` --fail-under=9.5",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": {
+                "owner": "python",
+                "fileLocation": ["relative", "${workspaceFolder}"],
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):(\\d+):\\s+(W|E).+:\\s+(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5
+                }
+            }
+        }
+    ]
+}

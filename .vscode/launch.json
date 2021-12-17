@@ -5,15 +5,30 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Current File",
+            "name": "Test - Search in group",
             "type": "python",
             "request": "launch",
-            "windows": {
-                "envFile": "${workspaceFolder}\\.vscode\\local.env"
-            },
-            "program": "${workspaceFolder}/gitlab_search.py",
-            "console": "integratedTerminal",
-            "args": ["", "-g", ""]
+            "envFile": "${workspaceFolder}/.vscode/test.env",
+            "program": "${workspaceFolder}/git_search.py",
+            "console": "internalConsole",
+            "args": [
+                "${config:project.debug.args_keyword}",
+                "-g",
+                "${config:project.debug.args_group_name}"
+            ]
+        },
+        {
+            "name": "Test - Search in project",
+            "type": "python",
+            "request": "launch",
+            "envFile": "${workspaceFolder}/.vscode/test.env",
+            "program": "${workspaceFolder}/git_search.py",
+            "console": "internalConsole",
+            "args": [
+                "${config:project.debug.args_keyword}",
+                "-p",
+                "${config:project.debug.args_project_id}"
+            ]
         }
     ]
 }
