@@ -1,12 +1,12 @@
 from git_search.base.base_repository import BaseRepository
-from git_search.constant.env import BASE_URL, API_TOKEN
+from os import environ as env
 from git_search.constant.const import PAGING
 from git_search.api.gitlab_api import PROJECT_GROUP_API, PROJECT_INFO_API, SEARCH_API
 
 
 class GitlabRepository(BaseRepository):
     def __init__(self):
-        super().__init__(BASE_URL, {"PRIVATE-TOKEN": API_TOKEN})
+        super().__init__(env["GITLAB_BASE_URL"], {"PRIVATE-TOKEN": env["GITLAB_API_TOKEN"]})
 
     def get_project_list(self, group_name):
         status, response = self.__send_get_request_paging(

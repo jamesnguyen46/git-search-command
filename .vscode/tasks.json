@@ -6,7 +6,7 @@
         {
             "label": "Install DEV environment",
             "type": "shell",
-            "command": "rm -rf .env && python -m venv .env && source .env/bin/activate && python -m pip install --upgrade pip && python -m pip install -r requirements-dev.txt",
+            "command": "rm -rf .env && python -m venv .env && source .env/bin/activate && python -m pip install --upgrade pip && python -m pip install -e \".[develop]\"",
             "options": {
                 "cwd": "${workspaceFolder}"
             },
@@ -15,16 +15,16 @@
         {
             "label": "Install PROD environment",
             "type": "shell",
-            "command": "rm -rf .env && python -m venv .env && source .env/bin/activate && python -m pip install --upgrade pip && python -m pip install -r requirements.txt",
+            "command": "rm -rf .env && python -m venv .env && source .env/bin/activate && python -m pip install --upgrade pip && python -m pip install -e .",
             "options": {
                 "cwd": "${workspaceFolder}"
             },
             "problemMatcher": []
         },
         {
-            "label": "Dev - Code formatter",
+            "label": "Dev - Code Formatter",
             "type": "shell",
-            "command": "source .env/bin/activate && black src/",
+            "command": "source .env/bin/activate && black .",
             "options": {
                 "cwd": "${workspaceFolder}"
             },

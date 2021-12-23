@@ -1,7 +1,7 @@
 from http import HTTPStatus
 import json
 import unittest
-import mock
+from unittest import mock
 from git_search.base.base_repository import BaseRepository
 
 
@@ -16,7 +16,9 @@ class TestBaseRepository(unittest.TestCase):
     def test_send_http_get_success(self) -> None:
         mock_resp = mock.Mock()
         mock_resp.status_code = HTTPStatus.OK
-        with open("src/tests/mock_json/response_success.json", encoding="utf-8") as file:
+        with open(
+            "src/tests/mock_json/response_success.json", encoding="utf-8"
+        ) as file:
             mock_body = json.load(file)
             mock_resp.json = mock.Mock(return_value=mock_body)
         self.get_method.return_value = mock_resp
@@ -29,7 +31,9 @@ class TestBaseRepository(unittest.TestCase):
         api_path = "test_send_http_get_failed_404"
         mock_resp = mock.Mock()
         mock_resp.status_code = HTTPStatus.NOT_FOUND
-        with open("src/tests/mock_json/response_failed_404.json", encoding="utf-8") as file:
+        with open(
+            "src/tests/mock_json/response_failed_404.json", encoding="utf-8"
+        ) as file:
             mock_body = json.load(file)
             mock_resp.json = mock.Mock(return_value=mock_body)
         self.get_method.return_value = mock_resp

@@ -1,5 +1,5 @@
 import argparse
-from git_search.constant.env import API_TOKEN
+from os import environ as env
 from git_search.gitlab.gitlab_command import SearchCommand
 
 
@@ -11,8 +11,8 @@ def search_main():
     group.add_argument("-g", "--group", help="the group name.")
     args = parser.parse_args()
 
-    if not API_TOKEN:
-        raise ValueError('"API_TOKEN" field cannot be empty.')
+    if not env["GITLAB_API_TOKEN"]:
+        raise ValueError("\"GITLAB_API_TOKEN\" field cannot be empty.")
 
     command = SearchCommand()
     if args.group:
