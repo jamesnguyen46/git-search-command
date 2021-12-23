@@ -1,6 +1,14 @@
 name: Code Quality
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - master
+      - develop
+  pull_request:
+    branches:
+      - master
+      - develop
 
 jobs:
   build:
@@ -20,4 +28,8 @@ jobs:
           pip install -r requirements.txt
       - name: Analysing the code with pylint
         run: |
-          pylint `ls -R|grep .py$|xargs` --fail-under=9.5
+          pylint $(find ./src -name "*.py" | xargs) --fail-under=9.5
+      - name: Run unit test
+        run: |
+          python -m unittest discover -v -s ./src/tests -p "test_*.py"
+

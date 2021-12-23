@@ -5,12 +5,14 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Test - Search in group",
+            "name": "Debug - Search in group",
             "type": "python",
             "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "python":"${workspaceFolder}/.env/bin/python",
             "envFile": "${workspaceFolder}/.vscode/test.env",
-            "program": "${workspaceFolder}/git_search.py",
-            "console": "internalConsole",
+            "program": "./src/git_search/__init__.py",
+            "console": "integratedTerminal",
             "args": [
                 "${config:project.debug.args_keyword}",
                 "-g",
@@ -18,12 +20,14 @@
             ]
         },
         {
-            "name": "Test - Search in project",
+            "name": "Debug - Search in project",
             "type": "python",
             "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "python":"${workspaceFolder}/.env/bin/python",
             "envFile": "${workspaceFolder}/.vscode/test.env",
-            "program": "${workspaceFolder}/git_search.py",
-            "console": "internalConsole",
+            "program": "./src/git_search/__init__.py",
+            "console": "integratedTerminal",
             "args": [
                 "${config:project.debug.args_keyword}",
                 "-p",

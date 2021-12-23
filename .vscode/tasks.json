@@ -24,7 +24,7 @@
         {
             "label": "Dev - Code formatter",
             "type": "shell",
-            "command": "source .env/bin/activate && black git_search.py",
+            "command": "source .env/bin/activate && black src/",
             "options": {
                 "cwd": "${workspaceFolder}"
             },
@@ -33,7 +33,7 @@
         {
             "label": "Dev - Code Analysis",
             "type": "shell",
-            "command": "source .env/bin/activate && pylint `ls -R|grep .py$|xargs` --fail-under=9.5",
+            "command": "source .env/bin/activate && pylint $(find ./src -name \"*.py\" | xargs) --fail-under=9.5",
             "options": {
                 "cwd": "${workspaceFolder}"
             },

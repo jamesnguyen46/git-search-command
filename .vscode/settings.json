@@ -1,9 +1,17 @@
 {
-    "project": {
-        "debug": {
-            "args_keyword": "",
-            "args_group_name": "",
-            "args_project_id": ""
-        }
-    }
+    // For debug
+    "project.debug.args_keyword": "",
+    "project.debug.args_group_name": "",
+    "project.debug.args_project_id": "",
+    // For testing
+    "python.testing.cwd": "${workspaceFolder}",
+    "python.testing.unittestArgs": [
+        "-v",
+        "-s",
+        "./src/tests",
+        "-p",
+        "test_*.py"
+    ],
+    "python.testing.pytestEnabled": false,
+    "python.testing.unittestEnabled": true
 }
