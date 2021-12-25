@@ -12,7 +12,7 @@ def search_main():
     args = parser.parse_args()
 
     if not env["GITLAB_API_TOKEN"]:
-        raise ValueError("\"GITLAB_API_TOKEN\" field cannot be empty.")
+        raise ValueError('"GITLAB_API_TOKEN" field cannot be empty.')
 
     command = SearchCommand()
     if args.group:

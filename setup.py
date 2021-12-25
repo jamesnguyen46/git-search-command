@@ -58,7 +58,7 @@ setup(
     ],
     keywords="gitlab, search, command line, python",
     package_dir={"": "src"},
-    packages=find_packages(where="src"),
+    packages=find_packages(where="src", exclude=["tests*"]),
     # https://packaging.python.org/guides/distributing-packages-using-setuptools/#python-requires
     python_requires=">=3.6, <4",
     install_requires=install_reqs,

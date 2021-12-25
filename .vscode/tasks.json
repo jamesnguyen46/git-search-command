@@ -22,33 +22,22 @@
             "problemMatcher": []
         },
         {
-            "label": "Dev - Code Formatter",
+            "label": "Code Clean (all files)",
             "type": "shell",
-            "command": "source .env/bin/activate && black .",
+            "command": "source .env/bin/activate && pre-commit run --verbose --all-files --show-diff-on-failure",
             "options": {
                 "cwd": "${workspaceFolder}"
             },
             "problemMatcher": []
         },
         {
-            "label": "Dev - Code Analysis",
+            "label": "Code Clean (files have changed)",
             "type": "shell",
-            "command": "source .env/bin/activate && pylint $(find ./src -name \"*.py\" | xargs) --fail-under=9.5",
+            "command": "source .env/bin/activate && pre-commit run --verbose --show-diff-on-failure",
             "options": {
                 "cwd": "${workspaceFolder}"
             },
-            "problemMatcher": {
-                "owner": "python",
-                "fileLocation": ["relative", "${workspaceFolder}"],
-                "pattern": {
-                    "regexp": "^(.*):(\\d+):(\\d+):\\s+(W|E).+:\\s+(.*)$",
-                    "file": 1,
-                    "line": 2,
-                    "column": 3,
-                    "severity": 4,
-                    "message": 5
-                }
-            }
+            "problemMatcher": []
         }
     ]
 }
