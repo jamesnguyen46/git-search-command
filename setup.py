@@ -1,4 +1,5 @@
 import os
+import shutil
 import pathlib
 import pkg_resources
 from setuptools import setup, find_packages, Command
@@ -17,8 +18,9 @@ with pathlib.Path("requirements-dev.txt").open(encoding="utf-8") as requirements
 class CleanCommand(Command):
     """Custom clean command to tidy up the project root."""
 
-    CLEAN_FILES = "./build ./dist ./src/*.egg-info"
-    PYTHON_CACHE = "$(find . -path ./.env -prune -name __pycache__ | xargs)"
+    CLEAN_DIR_NAMES = ("build", "dist", "__pycache__", "git_search.egg-info")
+    TOP_DIR = "."
+    EXCLUDE_DIRS = ".env"
 
     user_options = []
 
@@ -29,7 +31,17 @@ class CleanCommand(Command):
         pass
 
     def run(self):
-        os.system(f"rm -vrf {self.CLEAN_FILES} {self.PYTHON_CACHE}")
+        for root, dirs, _files in os.walk(self.TOP_DIR, topdown=True):
+            dirs[:] = [d for d in dirs if d not in self.EXCLUDE_DIRS]
+            dirs_should_removed = set(dirs) & set(self.CLEAN_DIR_NAMES)
+            for name in dirs_should_removed:
+                dir_path = os.path.join(root, name)
+                try:
+                    shutil.rmtree(dir_path)
+                    print(f'Has removed "{dir_path}".')
+                except OSError as err:
+                    print(f'Cannot remove "{dir_path}".')
+                    print(f"[Error] {err}")
 
 
 # Reference links:

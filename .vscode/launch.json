@@ -17,7 +17,17 @@
                 "${config:project.debug.args_keyword}",
                 "-g",
                 "${config:project.debug.args_group_name}"
-            ]
+            ],
+            "windows": {
+                "python": "${workspaceFolder}\\.env\\Scripts\\python.exe",
+                "envFile": "${workspaceFolder}\\.vscode\\test.env",
+                "program": ".\\src\\git_search\\__init__.py",
+                "args": [
+                    "${config:project.debug.args_keyword}",
+                    "-g",
+                    "${config:project.debug.args_group_name}"
+                ]
+            }
         },
         {
             "name": "Debug - Search in project",
@@ -32,7 +42,17 @@
                 "${config:project.debug.args_keyword}",
                 "-p",
                 "${config:project.debug.args_project_id}"
-            ]
+            ],
+            "windows": {
+                "python": "${workspaceFolder}\\.env\\Scripts\\python.exe",
+                "envFile": "${workspaceFolder}\\.vscode\\test.env",
+                "program": ".\\src\\git_search\\__init__.py",
+                "args": [
+                    "${config:project.debug.args_keyword}",
+                    "-p",
+                    "${config:project.debug.args_project_id}"
+                ]
+            }
         }
     ]
 }
