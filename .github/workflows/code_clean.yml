@@ -1,4 +1,4 @@
-name: pre-commit
+name: code-clean
 
 on: [push, pull_request]
 
@@ -26,4 +26,4 @@ jobs:
           python -m pip install -e ".[develop]"
       - name: Run pre-commit
         run: |
-          pre-commit run --verbose --show-diff-on-failure
+          pre-commit run --verbose --all-files --show-diff-on-failure

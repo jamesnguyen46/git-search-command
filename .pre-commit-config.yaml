@@ -25,3 +25,7 @@ repos:
         name: validate-python-file-name
         entry: python scripts/validate_python_file_name.py
         language: python
+      - id: detect-private-value
+        name: detect-private-value
+        entry: python scripts/detect_private_value.py
+        language: python
