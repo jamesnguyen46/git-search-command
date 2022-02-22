@@ -11,4 +11,6 @@ disable=
     # broad-except
     W0703,
     # no-self-use
-    R0201
+    R0201,
+    # import-error
+    E0401

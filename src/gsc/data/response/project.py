@@ -4,6 +4,7 @@ class Project:
         self._name = kwargs["name"]
         self._web_url = kwargs["web_url"]
 
+    # pylint: disable=C0103
     @property
     def id(self):
         return self._id
