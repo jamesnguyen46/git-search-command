@@ -102,7 +102,7 @@
         {
             "label": "Run unit test",
             "type": "shell",
-            "command": "source .env/bin/activate && python -m unittest discover -v -s ./src/tests -p \"test_*.py\"",
+            "command": "source .env/bin/activate && python -m unittest discover -v -s ./tests -p \"test_*.py\"",
             "options": {
                 "cwd": "${workspaceFolder}"
             },

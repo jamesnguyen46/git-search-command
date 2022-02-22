@@ -9,4 +9,6 @@ disable=
     # too-few-public-methods
     R0903,
     # broad-except
-    W0703
+    W0703,
+    # no-self-use
+    R0201

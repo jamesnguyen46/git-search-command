@@ -28,5 +28,5 @@ jobs:
           python -m pip install -e .
       - name: Run unit test
         run: |
-          python -m unittest discover -v -s ./src/tests -p "test_*.py"
+          python -m unittest discover -v -s ./tests -p "test_*.py"
 

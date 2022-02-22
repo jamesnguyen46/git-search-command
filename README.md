@@ -8,3 +8,6 @@
 
 
 Helpful commands to interactive with gitlab repository
+
+https://docs.github.com/en/rest/reference/search#search-code--code-samples
+https://docs.github.com/en/search-github/searching-on-github/searching-for-repositories

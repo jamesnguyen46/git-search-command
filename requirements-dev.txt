@@ -1,4 +1,7 @@
 black==21.12b0
+pre-commit==2.16.0
 pylint==2.12.2
 requests==2.26.0
-pre-commit==2.16.0
+rx==3.2.0
+jsonpickle==2.0.0
+click==8.0.3

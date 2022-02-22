@@ -18,7 +18,7 @@ with pathlib.Path("requirements-dev.txt").open(encoding="utf-8") as requirements
 class CleanCommand(Command):
     """Custom clean command to tidy up the project root."""
 
-    CLEAN_DIR_NAMES = ("build", "dist", "__pycache__", "git_search.egg-info")
+    CLEAN_DIR_NAMES = ("build", "dist", "__pycache__", "git_search_command.egg-info")
     TOP_DIR = "."
     EXCLUDE_DIRS = ".env"
 
@@ -48,7 +48,7 @@ class CleanCommand(Command):
 # - https://packaging.python.org/guides/distributing-packages-using-setuptools/
 # - https://github.com/pypa/sampleproject
 setup(
-    name="git_search",
+    name="git_search_command",
     version="0.1",
     description="Helpful command to search code snippet from gitlab",
     url="https://github.com/nguyen-ngoc-thach/git-search-command",
@@ -70,14 +70,14 @@ setup(
     ],
     keywords="gitlab, search, command line, python",
     package_dir={"": "src"},
-    packages=find_packages(where="src", exclude=["tests*"]),
+    packages=find_packages(where="src"),
     # https://packaging.python.org/guides/distributing-packages-using-setuptools/#python-requires
     python_requires=">=3.6, <4",
     install_requires=install_reqs,
     extras_require={"develop": develop_reqs},
     entry_points={
         "console_scripts": [
-            "gitsearch=git_search:search_main",
+            "gsc=gsc:main",
         ],
     },
     project_urls={
