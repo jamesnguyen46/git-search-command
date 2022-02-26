@@ -15,5 +15,12 @@ def block_main_thread(function):
     return inner
 
 
-def release_main_thread():
-    event.set()
+def release_main_thread(function):
+    def inner(*args, **kwargs):
+
+        function(*args, **kwargs)
+
+        if not event.is_set():
+            event.set()
+
+    return inner

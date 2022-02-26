@@ -68,7 +68,7 @@ setup(
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3 :: Only",
     ],
-    keywords="gitlab, search, command line, python",
+    keywords="gitlab, search, command line, python, git, github",
     package_dir={"": "src"},
     packages=find_packages(where="src"),
     # https://packaging.python.org/guides/distributing-packages-using-setuptools/#python-requires

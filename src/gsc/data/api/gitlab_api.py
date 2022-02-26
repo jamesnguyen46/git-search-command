@@ -1,14 +1,15 @@
-from os import environ as env
+from gsc.constants import GITLAB_HOST_NAME, GITLAB_PRIVATE_TOKEN
+from gsc import settings
 from gsc.request.request_wrapper import Api, GetRequest, GetRequestAutoFetchPagination
 
 
 class GitLabApi(Api):
     def __init__(self) -> None:
         super().__init__(
-            env["GITLAB_BASE_URL"],
+            settings.value(GITLAB_HOST_NAME),
             {
                 "Content-Type": "application/json;charset=UTF-8",
-                "PRIVATE-TOKEN": env["GITLAB_API_TOKEN"],
+                "PRIVATE-TOKEN": settings.value(GITLAB_PRIVATE_TOKEN),
             },
         )
 

@@ -9,7 +9,7 @@
             "type": "python",
             "request": "launch",
             "cwd": "${workspaceFolder}",
-            "python":"${workspaceFolder}/.env/bin/python",
+            "python":"${workspaceFolder}/.venv/bin/python",
             "envFile": "${workspaceFolder}/.vscode/test.env",
             "program": "${file}",
             "console": "integratedTerminal",
@@ -21,56 +21,6 @@
                     "${config:project.debug.args_keyword}",
                     "-g",
                     "${config:project.debug.args_group_name}"
-                ]
-            }
-        },
-        {
-            "name": "Debug - Search in group",
-            "type": "python",
-            "request": "launch",
-            "cwd": "${workspaceFolder}",
-            "python":"${workspaceFolder}/.env/bin/python",
-            "envFile": "${workspaceFolder}/.vscode/test.env",
-            "program": "./src/git_search/__init__.py",
-            "console": "integratedTerminal",
-            "args": [
-                "${config:project.debug.args_keyword}",
-                "-g",
-                "${config:project.debug.args_group_name}"
-            ],
-            "windows": {
-                "python": "${workspaceFolder}\\.env\\Scripts\\python.exe",
-                "envFile": "${workspaceFolder}\\.vscode\\test.env",
-                "program": ".\\src\\git_search\\__init__.py",
-                "args": [
-                    "${config:project.debug.args_keyword}",
-                    "-g",
-                    "${config:project.debug.args_group_name}"
-                ]
-            }
-        },
-        {
-            "name": "Debug - Search in project",
-            "type": "python",
-            "request": "launch",
-            "cwd": "${workspaceFolder}",
-            "python":"${workspaceFolder}/.env/bin/python",
-            "envFile": "${workspaceFolder}/.vscode/test.env",
-            "program": "./src/git_search/__init__.py",
-            "console": "integratedTerminal",
-            "args": [
-                "${config:project.debug.args_keyword}",
-                "-p",
-                "${config:project.debug.args_project_id}"
-            ],
-            "windows": {
-                "python": "${workspaceFolder}\\.env\\Scripts\\python.exe",
-                "envFile": "${workspaceFolder}\\.vscode\\test.env",
-                "program": ".\\src\\git_search\\__init__.py",
-                "args": [
-                    "${config:project.debug.args_keyword}",
-                    "-p",
-                    "${config:project.debug.args_project_id}"
                 ]
             }
         }

@@ -1,8 +1,6 @@
 {
-    // For debug
-    "project.debug.args_keyword": "",
-    "project.debug.args_group_name": "",
-    "project.debug.args_project_id": "",
+    // Virtual environment
+    "python.envFile": "${workspaceFolder}\\.venv",
     // For testing
     "python.testing.cwd": "${workspaceFolder}",
     "python.testing.unittestArgs": [

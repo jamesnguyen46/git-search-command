@@ -132,11 +132,12 @@ class GetRequestAutoFetchPagination(GetRequest):
             else:
                 response = super().send(_url, headers)
 
-            try:
-                _url = response.pagination_links["next"]["url"]
-                yield response
-            except Exception as _:
+            yield response
+
+            if "next" not in response.pagination_links:
                 break
+
+            _url = response.pagination_links["next"]["url"]
 
 
 class PostRequest(Request):

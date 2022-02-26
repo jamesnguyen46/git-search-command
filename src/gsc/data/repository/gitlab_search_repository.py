@@ -32,23 +32,3 @@ class GitLabSearchRepository(BaseRepository):
                 accumulate_start_line = item.start_lines
 
         return [list(group).pop() for _, group in groupby(response, lambda x: x.path)]
-
-
-# TEMP : remove it later
-if __name__ == "__main__":
-
-    def print_result(item):
-        str_line = ", ".join(map(str, item.start_lines))
-        print(f"{item.path} (line {str_line})")
-
-    repo = GitLabSearchRepository()
-    repo.search(2110, "addImplement").subscribe(
-        on_next=print_result,
-        on_completed=lambda: print("search_in_project completed"),
-        on_error=lambda e: print(f"[Error] : {e}"),
-    )
-
-    # res = repo.do_search(2110, "addImplement")
-    # for item in res:
-    #     str_line = ", ".join(map(str, item.start_lines))
-    #     print(f"{item.path} (line {str_line})")

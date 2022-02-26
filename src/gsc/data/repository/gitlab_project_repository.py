@@ -1,4 +1,4 @@
-from gsc.constant.const import PAGING_ITEM_NUMBER
+from gsc.constants import PAGING_ITEM_NUMBER
 from gsc.data.repository.base_repository import BaseRepository
 from gsc.data.response.project import Project
 from gsc.data.api.gitlab_api import ProjectApi
@@ -19,23 +19,3 @@ class GitLabProjectRepository(BaseRepository):
         return self.object_mapping(
             Project, self.api.project_list(group_name, PAGING_ITEM_NUMBER)
         )
-
-
-# TEMP : remove it later
-if __name__ == "__main__":
-    repo = GitLabProjectRepository()
-
-    def print_console():
-        pass
-
-    repo.project_list("android").subscribe(
-        on_next=lambda p: print(f"[{p.id}] {p.name} : {p.web_url}"),
-        on_completed=lambda: print("project_list completed"),
-        on_error=lambda e: print(f"[Error] : {e}"),
-    )
-
-    repo.project_info(2110).subscribe(
-        on_next=lambda p: print(f"[{p.id}] {p.name} : {p.web_url}"),
-        on_completed=lambda: print("project_info completed"),
-        on_error=lambda e: print(f"[Error] : {e}"),
-    )

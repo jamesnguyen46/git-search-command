@@ -1,6 +1,8 @@
 import types
 import json
 from typing import Any
+
+from pkg_resources import yield_lines
 from gsc.request.request_wrapper import Response
 
 
@@ -18,6 +20,9 @@ class BaseRepository:
         return self.__handle_response_object(model_cls, response)
 
     def __handle_response_object(self, model_cls, response: Response):
+        if not response.status_ok:
+            raise response.exception
+
         data = json.loads(response.binary)
 
         if isinstance(data, list):
@@ -27,6 +32,9 @@ class BaseRepository:
 
     def __handle_response_generator(self, model_cls, response: types.GeneratorType):
         for res in response:
+            if not res.status_ok:
+                raise res.exception
+
             data = json.loads(res.binary)
 
             if isinstance(data, dict):

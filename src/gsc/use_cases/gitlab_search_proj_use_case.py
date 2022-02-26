@@ -20,20 +20,3 @@ class GitLabSearchProjUseCase:
             self._project_repo.project_info(project_id),
             self._search_repo.search(project_id, keyword),
         ).pipe(ops.subscribe_on(rx_pool_scheduler())).subscribe(self._on_searching)
-
-
-# TEMP : remove it later
-if __name__ == "__main__":
-    import multiprocessing
-
-    event = multiprocessing.Event()
-
-    usecase = GitLabSearchProjUseCase()
-    usecase.on_searching().subscribe(
-        on_next=print,
-        on_completed=lambda: (print("completed"), event.set()),
-        on_error=print,
-    )
-
-    usecase.search(2110, "chuck")
-    event.wait()
