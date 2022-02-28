@@ -117,7 +117,3 @@ def __handle_complete():
 @release_main_thread
 def __handle_error(error: Exception):
     click.secho(f"[Error] {error}", fg="bright_red")
-
-
-if __name__ == "__main__":
-    gitlab_cli()

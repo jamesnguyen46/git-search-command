@@ -1,0 +1,10 @@
+[tool.gsc]
+
+
+[build-system]
+requires = ["setuptools>=45", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+write_to = "src/gsc/_version.py"
+write_to_template = '__version__ = "{version}"'

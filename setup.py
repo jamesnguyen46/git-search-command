@@ -1,18 +1,6 @@
 import os
 import shutil
-import pathlib
-import pkg_resources
 from setuptools import setup, find_packages, Command
-
-with pathlib.Path("requirements.txt").open(encoding="utf-8") as requirements:
-    install_reqs = [
-        str(require) for require in pkg_resources.parse_requirements(requirements)
-    ]
-
-with pathlib.Path("requirements-dev.txt").open(encoding="utf-8") as requirements_dev:
-    develop_reqs = [
-        str(require) for require in pkg_resources.parse_requirements(requirements_dev)
-    ]
 
 
 class CleanCommand(Command):
@@ -49,10 +37,10 @@ class CleanCommand(Command):
 # - https://github.com/pypa/sampleproject
 setup(
     name="git_search_command",
-    version="0.1",
-    description="Helpful command to search code snippet from gitlab",
+    use_scm_version=True,
+    description="A simple tool to search the expression in the project scope for GitLab and GitHub repositories.",
     url="https://github.com/nguyen-ngoc-thach/git-search-command",
-    author="Nguyễn Ngọc Thạch",
+    author="Nguyen Ngoc Thach",
     author_email="thachnguyen1989@gmail.com",
     # For a list of valid classifiers : https://pypi.org/classifiers/
     classifiers=[
@@ -73,13 +61,16 @@ setup(
     packages=find_packages(where="src"),
     # https://packaging.python.org/guides/distributing-packages-using-setuptools/#python-requires
     python_requires=">=3.6, <4",
-    install_requires=install_reqs,
-    extras_require={"develop": develop_reqs},
-    entry_points={
-        "console_scripts": [
-            "gsc=gsc:main",
-        ],
+    install_requires=[
+        "requests>=2.26.0",
+        "rx>=3.2.0",
+        "click>=8.0.3",
+        "python-dotenv>=0.19.2",
+    ],
+    extras_require={
+        "develop": ["black>=21.12b0", "pre-commit>=2.16.0", "pylint>=2.12.2"]
     },
+    entry_points={"console_scripts": ["gsc=gsc:main"]},
     project_urls={
         "Bug Reports": "https://github.com/nguyen-ngoc-thach/git-search-command/issues",
         "Source": "https://github.com/nguyen-ngoc-thach/git-search-command",
