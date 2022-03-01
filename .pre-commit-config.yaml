@@ -12,6 +12,11 @@ repos:
     rev: 21.12b0
     hooks:
       - id: black
+  - repo: https://github.com/markdownlint/markdownlint
+    rev: v0.11.0
+    hooks:
+      - id: markdownlint
+        name: markdownlint
   - repo: https://github.com/pycqa/pylint
     rev: v2.12.2
     hooks:

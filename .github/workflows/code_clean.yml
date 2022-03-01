@@ -1,4 +1,4 @@
-name: code-clean
+name: Code Clean
 
 on: [push, pull_request]
 

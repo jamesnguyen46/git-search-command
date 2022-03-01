@@ -15,6 +15,9 @@ CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
 )
 @click.pass_context
 def app(ctx, show_version: bool):
+    if ctx.invoked_subcommand is not None:
+        return
+
     if show_version:
         click.secho(__version__)
     else:
