@@ -1,14 +1,14 @@
 from rx.core import Observable
 from rx.subject import ReplaySubject
 from rx import operators as ops
+from gsc.use_cases.base_use_case import BaseUseCase
 from gsc.data.response.project import Project
-from gsc.data.response.search_result import SearchResult
 from gsc.request.rx_task import rx_pool_scheduler
 from gsc.data.repository.gitlab_search_repository import GitLabSearchRepository
 from gsc.data.repository.gitlab_project_repository import GitLabProjectRepository
 
 
-class GitLabSearchGroupUseCase:
+class GitLabSearchGroupUseCase(BaseUseCase):
     def __init__(self) -> None:
         self._project_repo = GitLabProjectRepository()
         self._on_searching = ReplaySubject()

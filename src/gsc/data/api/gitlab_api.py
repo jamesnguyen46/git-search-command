@@ -32,4 +32,8 @@ class ProjectApi(GitLabApi):
 class SearchApi(GitLabApi):
     @GetRequest(path="api/v4/projects/{proj_id}/search")
     def search_in_project(self, proj_id: int, keyword: str):
-        return {"proj_id": proj_id}, {"scope": "blobs", "search": keyword}
+        return {"proj_id": proj_id}, {
+            "scope": "blobs",
+            "search": keyword,
+            "per_page": 100,
+        }

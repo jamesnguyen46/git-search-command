@@ -1,7 +1,7 @@
 from itertools import groupby
 from gsc.request.rx_task import rx_task
 from gsc.data.repository.base_repository import BaseRepository
-from gsc.data.response.search_result import SearchResult
+from gsc.data.response.file_name import FileName
 from gsc.data.api.gitlab_api import SearchApi
 
 
@@ -16,7 +16,7 @@ class GitLabSearchRepository(BaseRepository):
 
     def do_search(self, project_id: int, keyword: str):
         response = self.object_mapping(
-            SearchResult, self.api.search_in_project(project_id, keyword)
+            FileName, self.api.search_in_project(project_id, keyword)
         )
 
         if isinstance(response, list):

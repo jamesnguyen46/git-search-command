@@ -19,7 +19,7 @@ class CleanCommand(Command):
         pass
 
     def run(self):
-        for root, dirs, _files in os.walk(self.TOP_DIR, topdown=True):
+        for root, dirs, _ in os.walk(self.TOP_DIR, topdown=True):
             dirs[:] = [d for d in dirs if d not in self.EXCLUDE_DIRS]
             dirs_should_removed = set(dirs) & set(self.CLEAN_DIR_NAMES)
             for name in dirs_should_removed:

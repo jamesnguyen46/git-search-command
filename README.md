@@ -11,7 +11,7 @@ A simple tool to search the expression in the project scope for GitLab and GitHu
 
 ## Prerequisites
 
-1.Install [Python3](https://www.python.org/downloads/)
+1.Install [Python3](https://www.python.org/downloads/).
 2.Create a [personal GitLab access token](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html#creating-a-personal-access-token) and store it in a secure place.
 
 ## Installation
@@ -40,11 +40,13 @@ $ gsc gl search --help
 
 Usage: gsc gl search [OPTIONS] <keyword>
 
-  Search the content in GitLab repositories
+  Search the content in GitLab repositories.
 
 Options:
-  -g, --group <string>  Search in the specified group
-  -p, --project <int>   Search in the specified project
+  -g, --group <string>  Search in the specified group.
+  -p, --project <int>   Search in the specified project.
+  -v                    Show result preview, available only when searching
+                        project, not in group.
   -h, --help            Show this message and exit.
 ```
 

@@ -1,12 +1,13 @@
 from rx.core import Observable
 from rx.subject import ReplaySubject
 from rx import concat, operators as ops
+from gsc.use_cases.base_use_case import BaseUseCase
 from gsc.request.rx_task import rx_pool_scheduler
 from gsc.data.repository.gitlab_search_repository import GitLabSearchRepository
 from gsc.data.repository.gitlab_project_repository import GitLabProjectRepository
 
 
-class GitLabSearchProjUseCase:
+class GitLabSearchProjUseCase(BaseUseCase):
     def __init__(self) -> None:
         self._project_repo = GitLabProjectRepository()
         self._search_repo = GitLabSearchRepository()

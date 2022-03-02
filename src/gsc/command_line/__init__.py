@@ -3,7 +3,7 @@ import multiprocessing
 event = multiprocessing.Event()
 
 
-def block_main_thread(function):
+def keep_main_thread_running(function):
     def inner(*args, **kwargs):
         if event.is_set():
             event.clear()
@@ -15,7 +15,7 @@ def block_main_thread(function):
     return inner
 
 
-def release_main_thread(function):
+def finish_main_thread(function):
     def inner(*args, **kwargs):
 
         function(*args, **kwargs)

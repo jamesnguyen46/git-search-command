@@ -1,11 +1,11 @@
-class SearchResult:
+class FileName:
     def __init__(self, **kwargs):
         self._name = kwargs["basename"]
         self._path = kwargs["path"]
         self._start_lines = []
         self._start_lines.append(kwargs["startline"])
         self._project_id = kwargs["project_id"]
-        self._keyword = ""
+        self._data_preview = kwargs["data"]
 
     @property
     def name(self):
@@ -28,9 +28,5 @@ class SearchResult:
         self._start_lines = new_list
 
     @property
-    def keyword(self):
-        return self._keyword
-
-    @keyword.setter
-    def keyword(self, keyword: str):
-        self._keyword = keyword
+    def data_preview(self):
+        return self._data_preview
