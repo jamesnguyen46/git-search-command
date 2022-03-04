@@ -3,8 +3,8 @@ from gsc import settings
 from gsc.constants import GITLAB_KEY_LIST, GITLAB_HOST_NAME, GITLAB_PRIVATE_TOKEN
 from gsc.command_line import keep_main_thread_running
 from gsc.command_line.print_observer import (
-    PrintGroupResultObserver,
-    PrintProjectResultObserver,
+    ConsoleGroupResultObserver,
+    ConsoleProjectResultObserver,
 )
 from gsc.use_cases.gitlab_search_proj_use_case import GitLabSearchProjUseCase
 from gsc.use_cases.gitlab_search_group_use_case import GitLabSearchGroupUseCase
@@ -61,8 +61,17 @@ def gitlab_config(ctx, url: str, token: str, show_all: bool):
     default=False,
     help="Show result preview, available only when searching project, not in group.",
 )
+@click.option(
+    "-o",
+    "--output",
+    type=str,
+    metavar="<string>",
+    help="Export the search result to file, only support text file.",
+)
 @click.pass_context
-def search(ctx, keyword: str, group: str, project: int, show_preview: bool):
+def search(
+    ctx, keyword: str, group: str, project: int, output: str, show_preview: bool
+):
     click.clear()
 
     if not __validate_environment_variables():
@@ -71,11 +80,9 @@ def search(ctx, keyword: str, group: str, project: int, show_preview: bool):
         return
 
     if keyword and group:
-        click.secho(f'Searching for "{keyword}" in "{group}" group ...')
-        __search_in_group(keyword, group)
+        __search_in_group(keyword, group, output)
     elif keyword and project:
-        click.secho(f'Searching for "{keyword}" in project with id "{project}" ...')
-        __search_in_project(keyword, project, show_preview)
+        __search_in_project(keyword, project, show_preview, output)
     else:
         click.secho(search.get_help(ctx))
 
@@ -88,16 +95,27 @@ def __validate_environment_variables():
 
 
 @keep_main_thread_running
-def __search_in_group(keyword: str, group_name: str):
+def __search_in_group(keyword: str, group_name: str, output_path: str):
     usecase = GitLabSearchGroupUseCase()
-    usecase.on_searching().subscribe(PrintGroupResultObserver(keyword=keyword))
+    usecase.on_searching().subscribe(
+        ConsoleGroupResultObserver(
+            group=group_name, keyword=keyword, output_path=output_path
+        )
+    )
     usecase.search(group_name, keyword)
 
 
 @keep_main_thread_running
-def __search_in_project(keyword: str, project_id: int, show_preview: bool):
+def __search_in_project(
+    keyword: str, project_id: int, show_preview: bool, output_path: str
+):
     usecase = GitLabSearchProjUseCase()
     usecase.on_searching().subscribe(
-        PrintProjectResultObserver(keyword=keyword, show_code_preview=show_preview)
+        ConsoleProjectResultObserver(
+            id=project_id,
+            keyword=keyword,
+            preview=show_preview,
+            output_path=output_path,
+        )
     )
     usecase.search(project_id, keyword)
