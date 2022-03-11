@@ -22,7 +22,7 @@ repos:
     hooks:
       - id: pylint
         args:
-        - --fail-under=9.5
+        - --fail-under=10
   - repo: local
     hooks:
       - id: validate-python-file-name

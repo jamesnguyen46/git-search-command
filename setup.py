@@ -66,6 +66,7 @@ setup(
         "rx>=3.2.0",
         "click>=8.0.3",
         "python-dotenv>=0.19.2",
+        "jsonpickle>=2.1.0",
     ],
     extras_require={
         "develop": ["black>=21.12b0", "pre-commit>=2.16.0", "pylint>=2.12.2"]

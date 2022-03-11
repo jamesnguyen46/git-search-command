@@ -14,7 +14,7 @@ CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
     "-v", "--version", "show_version", is_flag=True, help="Git search command version"
 )
 @click.pass_context
-def app(ctx, show_version: bool):
+def app(ctx=None, show_version: bool = False):
     if ctx.invoked_subcommand is not None:
         return
 

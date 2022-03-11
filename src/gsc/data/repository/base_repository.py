@@ -1,8 +1,6 @@
 import types
 import json
 from typing import Any
-
-from pkg_resources import yield_lines
 from gsc.request.request_wrapper import Response
 
 

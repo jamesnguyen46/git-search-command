@@ -1,6 +1,6 @@
 from gsc.constants import PAGING_ITEM_NUMBER
 from gsc.data.repository.base_repository import BaseRepository
-from gsc.data.response.project import Project
+from gsc.entities.gitlab_model import Project
 from gsc.data.api.gitlab_api import ProjectApi
 from gsc.request.rx_task import rx_task
 

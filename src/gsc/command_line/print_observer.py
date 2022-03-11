@@ -1,8 +1,7 @@
 from typing import Any, Optional
 import click
 from rx.core import typing, Observer
-from gsc.data.response.project import Project
-from gsc.data.response.file_name import FileName
+from gsc.entities.gitlab_model import Project, FileName
 from gsc.command_line import finish_main_thread
 
 
@@ -140,7 +139,7 @@ class ConsoleGroupResultObserver(ConsoleProjectResultObserver):
 
     def _on_print_project(self, project: Project) -> None:
         self._project_count += 1
-        return super().on_print_project(project)
+        return super()._on_print_project(project)
 
     @finish_main_thread
     def _on_print_end(self) -> None:

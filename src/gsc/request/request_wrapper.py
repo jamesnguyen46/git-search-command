@@ -2,7 +2,7 @@ from enum import Enum
 from http import HTTPStatus
 from urllib.parse import urlparse, urljoin
 import requests
-from gsc.utils.json import json_serialize
+from gsc.utils import json_serialize
 
 
 class HttpMethod(Enum):

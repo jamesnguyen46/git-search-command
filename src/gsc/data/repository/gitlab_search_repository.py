@@ -1,7 +1,7 @@
 from itertools import groupby
 from gsc.request.rx_task import rx_task
 from gsc.data.repository.base_repository import BaseRepository
-from gsc.data.response.file_name import FileName
+from gsc.entities.gitlab_model import FileName
 from gsc.data.api.gitlab_api import SearchApi
 
 
