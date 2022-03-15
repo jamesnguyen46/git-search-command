@@ -16,14 +16,14 @@ def gitlab_cli():
 
 
 @gitlab_cli.command(
-    "env", help="Configure the environment variable, support multiple environments."
+    "env", help="Setup the environment for searching, support multiple environments."
 )
 @click.option(
     "-n",
     "--new",
     type=str,
     metavar="<environment>",
-    help="Create new or update its information if it was created.",
+    help="Create new or override the env information if it was existed.",
 )
 @click.option(
     "-d",
@@ -37,14 +37,14 @@ def gitlab_cli():
     "--remove",
     type=str,
     metavar="<environment>",
-    help="Remove a environments.",
+    help="Remove the environment.",
 )
 @click.option(
     "-i",
     "--info",
     type=str,
     metavar="<environment>",
-    help="Show the detail of a environment.",
+    help="Display the environment info.",
 )
 @click.option(
     "-l",
@@ -52,7 +52,7 @@ def gitlab_cli():
     "show_list",
     is_flag=True,
     default=False,
-    help="List the environment.",
+    help="List all environment.",
 )
 @click.pass_context
 def environment(ctx, **kwargs):
@@ -74,14 +74,18 @@ def environment(ctx, **kwargs):
 @gitlab_cli.command("search", help="Search the content in GitLab repositories.")
 @click.argument("keyword", type=str, metavar="<keyword>")
 @click.option(
-    "-g", "--group", type=str, metavar="<string>", help="Search in the specified group."
+    "-g",
+    "--group",
+    type=str,
+    metavar="<int>",
+    help="Search in the specified project group, input group id or group path.",
 )
 @click.option(
     "-p",
     "--project",
     type=int,
     metavar="<int>",
-    help="Search in the specified project.",
+    help="Search in the specified project, input project id.",
 )
 @click.option(
     "-e",
@@ -89,7 +93,7 @@ def environment(ctx, **kwargs):
     "env",
     type=str,
     metavar="<string>",
-    help="Select the environment to search.",
+    help="Select the environment for searching, if not declare, default environment has been used.",
 )
 @click.option(
     "-v",
@@ -102,7 +106,7 @@ def environment(ctx, **kwargs):
     "-o",
     "--output",
     type=str,
-    metavar="<string>",
+    metavar="<file_path>",
     help="Export the search result to file, only support text file.",
 )
 @click.pass_context

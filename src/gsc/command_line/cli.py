@@ -11,7 +11,11 @@ CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
     help="A simple tool to search the expression in the project scope for GitLab and GitHub repositories.",
 )
 @click.option(
-    "-v", "--version", "show_version", is_flag=True, help="Git search command version"
+    "-v",
+    "--version",
+    "show_version",
+    is_flag=True,
+    help="Show the current gsc version.",
 )
 @click.pass_context
 def app(ctx=None, show_version: bool = False):
