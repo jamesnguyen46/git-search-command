@@ -77,7 +77,7 @@ def environment(ctx, **kwargs):
     "-g",
     "--group",
     type=str,
-    metavar="<int>",
+    metavar="<string>",
     help="Search in the specified project group, input group id or group path.",
 )
 @click.option(

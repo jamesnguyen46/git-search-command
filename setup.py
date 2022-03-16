@@ -1,14 +1,21 @@
 import os
+import sys
 import shutil
 from setuptools import setup, find_packages, Command
+from pathlib import Path
 
+CURRENT_DIR = Path(__file__).parent
+sys.path.insert(0, str(CURRENT_DIR))
+
+def get_long_description() -> str:
+    return (CURRENT_DIR / "README.md").read_text(encoding="utf8")
 
 class CleanCommand(Command):
     """Custom clean command to tidy up the project root."""
 
     CLEAN_DIR_NAMES = ("build", "dist", "__pycache__", "git_search_command.egg-info")
     TOP_DIR = "."
-    EXCLUDE_DIRS = ".env"
+    EXCLUDE_DIRS = (".env", ".venv")
 
     user_options = []
 
@@ -39,6 +46,8 @@ setup(
     name="git_search_command",
     use_scm_version=True,
     description="A simple tool to search the expression in the project scope for GitLab and GitHub repositories.",
+    long_description=get_long_description(),
+    long_description_content_type="text/markdown",
     url="https://github.com/nguyen-ngoc-thach/git-search-command",
     author="Nguyen Ngoc Thach",
     author_email="thachnguyen1989@gmail.com",
