@@ -1,14 +1,16 @@
 import os
 import sys
 import shutil
-from setuptools import setup, find_packages, Command
 from pathlib import Path
+from setuptools import setup, find_packages, Command
 
 CURRENT_DIR = Path(__file__).parent
 sys.path.insert(0, str(CURRENT_DIR))
 
+
 def get_long_description() -> str:
     return (CURRENT_DIR / "README.md").read_text(encoding="utf8")
+
 
 class CleanCommand(Command):
     """Custom clean command to tidy up the project root."""
