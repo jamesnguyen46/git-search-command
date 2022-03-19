@@ -1,10 +1,9 @@
-# GITLAB SEARCH COMMAND TOOLS
+# GIT SEARCH COMMAND
 
 [![PyPI](https://img.shields.io/pypi/v/git-search-command)](https://pypi.org/project/git-search-command/)
 [![Last commit](https://img.shields.io/github/last-commit/nguyen-ngoc-thach/git-search-command?color=yellow)](https://github.com/nguyen-ngoc-thach/git-search-command/commits/main)
-[![Code style](https://img.shields.io/badge/code%20style-black-blue)](https://github.com/psf/black)
-[![Code Quality](https://img.shields.io/github/workflow/status/nguyen-ngoc-thach/git-search-command/Code%20Quality?label=pylint)](https://github.com/nguyen-ngoc-thach/git-search-command/actions)
-[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
+[![Code style](https://img.shields.io/badge/code%20style-black-black)](https://github.com/psf/black)
+[![pre-commit](https://img.shields.io/github/workflow/status/nguyen-ngoc-thach/git-search-command/code-clean/master?label=pre-commit)](https://github.com/nguyen-ngoc-thach/git-search-command/actions/workflows/code_clean.yml)
 [![License](https://img.shields.io/badge/license-Apache-orange)](https://github.com/nguyen-ngoc-thach/git-search-command/blob/main/LICENSE)
 
 A simple tool to search the expression in the project scope for GitLab and GitHub repositories.
@@ -88,7 +87,7 @@ Usage: gsc gl search [OPTIONS] <keyword>
   Search the content in GitLab repositories.
 
 Options:
-  -g, --group <int>           Search in the specified project group, input
+  -g, --group <string>        Search in the specified project group, input
                               group id or group path.
   -p, --project <int>         Search in the specified project, input project
                               id.
@@ -96,8 +95,8 @@ Options:
                               declare, default environment has been used.
   -v                          Show result preview, available only when
                               searching project, not in group.
-  -o, --output <file_path>    Export the search result to file, only support
-                              text file.
+  -o, --output <file_path>    Export the search result to file, support txt
+                              and markdown file.
   -h, --help                  Show this message and exit.
 ```
 

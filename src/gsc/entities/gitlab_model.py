@@ -13,7 +13,13 @@ class FileName(BaseModel):
     def __init__(self, **kwargs):
         self.name = kwargs.get("basename")
         self.path = kwargs.get("path")
+        self.ref = kwargs.get("ref")
         self.start_lines = []
         self.start_lines.append(kwargs.get("startline"))
         self.project_id = kwargs.get("project_id")
+        self.project_url = ""
         self.data_preview = kwargs.get("data")
+
+    @property
+    def web_url(self):
+        return f"{self.project_url}/-/blob/{self.ref}/{self.path}"

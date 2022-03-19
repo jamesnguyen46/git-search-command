@@ -37,6 +37,8 @@ class GitLabSearchGroupUseCase(BaseUseCase):
 
     def __do_search_in_project(self, project: Project, keyword: str):
         response = GitLabSearchRepository().do_search(project.id, keyword)
-        if response:
+        if response and project is not None:
+            for item in response:
+                item.project_url = project.web_url
             response.insert(0, project)
         return response

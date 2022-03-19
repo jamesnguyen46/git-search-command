@@ -5,7 +5,7 @@ from gsc.config import GitlabConfig
 class GitLabApi(Api):
     def __init__(self) -> None:
         config = GitlabConfig()
-        selected_env = config.get_session_env() or config.get_default_env()
+        selected_env = config.get_session_env()
         super().__init__(
             selected_env.host_name,
             {

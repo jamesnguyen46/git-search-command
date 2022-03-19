@@ -2,6 +2,7 @@ import click
 from gsc.utils import is_valid_environment_name
 from gsc.command_line import keep_main_thread_running
 from gsc.command_line.print_observer import (
+    PrintParam,
     ConsoleGroupResultObserver,
     ConsoleProjectResultObserver,
 )
@@ -90,7 +91,7 @@ def environment(ctx, **kwargs):
 @click.option(
     "-e",
     "--environment",
-    "env",
+    "session_env",
     type=str,
     metavar="<string>",
     help="Select the environment for searching, if not declare, default environment has been used.",
@@ -107,7 +108,7 @@ def environment(ctx, **kwargs):
     "--output",
     type=str,
     metavar="<file_path>",
-    help="Export the search result to file, only support text file.",
+    help="Export the search result to file, support txt and markdown file.",
 )
 @click.pass_context
 def search(ctx, **kwargs):
@@ -119,49 +120,45 @@ def search(ctx, **kwargs):
         return
 
     if kwargs.get("keyword"):
-        keyword = kwargs.get("keyword")
-        env = kwargs.get("env")
-        output = kwargs.get("output")
-        if env:
-            config.set_session_env(env)
+        param = PrintParam(
+            service_name="GitLab",
+            keyword=kwargs.get("keyword"),
+            show_preview=kwargs.get("show_preview"),
+            output_path=kwargs.get("output"),
+            project_id=kwargs.get("project"),
+            group=kwargs.get("group"),
+        )
+
+        session_env = kwargs.get("session_env")
+        if session_env:
+            param.env_name = session_env
+            config.set_session_env(session_env)
+        else:
+            default_env = config.get_default_env()
+            param.env_name = default_env.name
+            config.set_session_env(default_env.name)
 
         click.clear()
-        if kwargs.get("project"):
-            project = kwargs.get("project")
-            show_preview = kwargs.get("show_preview")
-            __search_in_project(keyword, project, show_preview, output)
-        elif kwargs.get("group"):
-            group = kwargs.get("group")
-            __search_in_group(keyword, group, output)
+        if param.input_project:
+            __search_in_project(param)
+        elif param.input_group:
+            __search_in_group(param)
     else:
         click.secho(search.get_help(ctx))
 
 
 @keep_main_thread_running
-def __search_in_group(keyword: str, group_name: str, output_path: str):
+def __search_in_group(param: PrintParam):
     usecase = GitLabSearchGroupUseCase()
-    usecase.on_searching().subscribe(
-        ConsoleGroupResultObserver(
-            group=group_name, keyword=keyword, output_path=output_path
-        )
-    )
-    usecase.search(group_name, keyword)
+    usecase.on_searching().subscribe(ConsoleGroupResultObserver(param=param))
+    usecase.search(param.input_group, param.keyword)
 
 
 @keep_main_thread_running
-def __search_in_project(
-    keyword: str, project_id: int, show_preview: bool, output_path: str
-):
+def __search_in_project(param: PrintParam):
     usecase = GitLabSearchProjUseCase()
-    usecase.on_searching().subscribe(
-        ConsoleProjectResultObserver(
-            id=project_id,
-            keyword=keyword,
-            preview=show_preview,
-            output_path=output_path,
-        )
-    )
-    usecase.search(project_id, keyword)
+    usecase.on_searching().subscribe(ConsoleProjectResultObserver(param=param))
+    usecase.search(param.input_project, param.keyword)
 
 
 def __show_list_envs(config: EnvConfig):
