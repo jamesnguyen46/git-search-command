@@ -3,6 +3,7 @@ from http import HTTPStatus
 from urllib.parse import urlparse, urljoin
 import requests
 from gsc.utils import json_serialize
+from gsc.constants import DEFAULT_TIMEOUT
 
 
 class HttpMethod(Enum):
@@ -84,6 +85,7 @@ class Request:
                 headers=req_header,
                 params=params,
                 data=data,
+                timeout=DEFAULT_TIMEOUT,
             )
             response.raise_for_status()
             return self.__handle_success_response(response)
