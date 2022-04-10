@@ -1,7 +1,7 @@
 # GIT SEARCH COMMAND
 
 [![PyPI](https://img.shields.io/pypi/v/git-search-command)](https://pypi.org/project/git-search-command/)
-[![Last commit](https://img.shields.io/github/last-commit/nguyen-ngoc-thach/git-search-command?color=yellow)](https://github.com/nguyen-ngoc-thach/git-search-command/commits/main)
+[![Last commit](https://img.shields.io/github/last-commit/nguyen-ngoc-thach/git-search-command?color=yellow)](https://github.com/nguyen-ngoc-thach/git-search-command/commits/)
 [![Code style](https://img.shields.io/badge/code%20style-black-black)](https://github.com/psf/black)
 [![pre-commit](https://img.shields.io/github/workflow/status/nguyen-ngoc-thach/git-search-command/code-clean/master?label=pre-commit)](https://github.com/nguyen-ngoc-thach/git-search-command/actions/workflows/code_clean.yml)
 [![License](https://img.shields.io/badge/license-Apache-orange)](https://github.com/nguyen-ngoc-thach/git-search-command/blob/main/LICENSE)
@@ -141,6 +141,20 @@ python setup.py -v build install
 
 Run `Build Project` task.
 
+### Design Concept
+
+- [OOP](https://en.wikipedia.org/wiki/Object-oriented_programming)
+- [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
+- Repository Pattern
+
+### Library
+
+- [Python Request](<https://docs.python-requests.org/en/latest/>)
+- [ReactiveX for Python (RxPY)](https://rxpy.readthedocs.io/en/latest/#)
+- [Click](https://click.palletsprojects.com/)
+- [Python-dotenv](https://github.com/theskumar/python-dotenv)
+- [JsonPickle](https://jsonpickle.github.io/)
+
 ## License
 
 [Apache](https://github.com/nguyen-ngoc-thach/git-search-command/blob/main/LICENSE)
@@ -152,3 +166,4 @@ Run `Build Project` task.
 - [API Project](https://docs.gitlab.com/ee/api/projects.html)
 - [API Group](https://docs.gitlab.com/ee/api/groups.html)
 - [API Search](https://docs.gitlab.com/ee/api/search.html)
+- [Search Rate Limit](https://docs.gitlab.com/ee/administration/instance_limits.html#search-rate-limit)

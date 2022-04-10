@@ -80,7 +80,7 @@ setup(
         "jsonpickle>=2.1.0",
     ],
     extras_require={
-        "develop": ["black>=21.12b0", "pre-commit>=2.16.0", "pylint>=2.12.2"]
+        "develop": ["black>=22.3.0", "pre-commit>=2.16.0", "pylint>=2.12.2"]
     },
     entry_points={"console_scripts": ["gsc=gsc:main"]},
     project_urls={
