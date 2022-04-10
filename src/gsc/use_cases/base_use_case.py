@@ -1,2 +1,5 @@
-class BaseUseCase:
+import abc
+
+
+class BaseUseCase(abc.ABC):
     pass

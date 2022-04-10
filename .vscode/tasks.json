@@ -98,22 +98,6 @@
                 },
                 "problemMatcher": []
             }
-        },
-        {
-            "label": "Run unit test",
-            "type": "shell",
-            "command": "source .venv/bin/activate && python -m unittest discover -v -s ./tests -p \"test_*.py\"",
-            "options": {
-                "cwd": "${workspaceFolder}"
-            },
-            "problemMatcher": [],
-            "windows": {
-                "command": ".\\.venv\\Scripts\\Activate.ps1 ; python -m unittest discover -v -s .\\src\\tests -p \"test_*.py\"",
-                "options": {
-                    "cwd": "${workspaceFolder}"
-                },
-                "problemMatcher": []
-            }
         }
     ]
 }

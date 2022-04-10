@@ -10,7 +10,8 @@ def rx_pool_scheduler():
     return ThreadPoolScheduler(optimal_thread_count)
 
 
-def rx_task(function):
+# pylint: disable=C0103
+def RxTask(function):
     def wrapper(*args, **kwargs) -> core.Observable:
         def subscribe(observer, _=None):
             try:

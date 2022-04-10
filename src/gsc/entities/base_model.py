@@ -1,7 +1,8 @@
+import abc
 import jsonpickle
 
 
-class BaseModel:
+class BaseModel(abc.ABC):
     def __str__(self) -> str:
         return jsonpickle.encode(self.__dict__)
 

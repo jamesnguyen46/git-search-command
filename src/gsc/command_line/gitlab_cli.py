@@ -1,14 +1,16 @@
 import click
 from gsc.utils import is_valid_environment_name
 from gsc.command_line import keep_main_thread_running
-from gsc.command_line.print_observer import (
-    PrintParam,
-    ConsoleGroupResultObserver,
-    ConsoleProjectResultObserver,
+from gsc.command_line.observer.gitlab_observer import (
+    GitLabParam,
+    GitLabPrintProjectObserver,
+    GitLabPrintGroupObserver,
 )
-from gsc.config import Env, EnvConfig, GitlabConfig
-from gsc.use_cases.gitlab_search_proj_use_case import GitLabSearchProjUseCase
-from gsc.use_cases.gitlab_search_group_use_case import GitLabSearchGroupUseCase
+from gsc.config import Env, EnvConfig, GitLabConfig
+from gsc.use_cases.gitlab_search_use_case import (
+    GitLabSearchProjectUseCase,
+    GitLabSearchGroupUseCase,
+)
 
 
 @click.group("gl", help="Search in GitLab repositories.")
@@ -57,7 +59,7 @@ def gitlab_cli():
 )
 @click.pass_context
 def environment(ctx, **kwargs):
-    config = GitlabConfig()
+    config = GitLabConfig()
     if kwargs.get("show_list"):
         __show_list_envs(config)
     elif kwargs.get("new"):
@@ -97,13 +99,6 @@ def environment(ctx, **kwargs):
     help="Select the environment for searching, if not declare, default environment has been used.",
 )
 @click.option(
-    "-v",
-    "show_preview",
-    is_flag=True,
-    default=False,
-    help="Show result preview, available only when searching project, not in group.",
-)
-@click.option(
     "-o",
     "--output",
     type=str,
@@ -112,7 +107,7 @@ def environment(ctx, **kwargs):
 )
 @click.pass_context
 def search(ctx, **kwargs):
-    config = GitlabConfig()
+    config = GitLabConfig()
     config.set_session_env("")
     if not config.get_default_env():
         click.secho("There is no environment.")
@@ -120,10 +115,8 @@ def search(ctx, **kwargs):
         return
 
     if kwargs.get("keyword"):
-        param = PrintParam(
-            service_name="GitLab",
+        param = GitLabParam(
             keyword=kwargs.get("keyword"),
-            show_preview=kwargs.get("show_preview"),
             output_path=kwargs.get("output"),
             project_id=kwargs.get("project"),
             group=kwargs.get("group"),
@@ -148,16 +141,16 @@ def search(ctx, **kwargs):
 
 
 @keep_main_thread_running
-def __search_in_group(param: PrintParam):
+def __search_in_group(param: GitLabParam):
     usecase = GitLabSearchGroupUseCase()
-    usecase.on_searching().subscribe(ConsoleGroupResultObserver(param=param))
+    usecase.on_searching().subscribe(GitLabPrintGroupObserver(param=param))
     usecase.search(param.input_group, param.keyword)
 
 
 @keep_main_thread_running
-def __search_in_project(param: PrintParam):
-    usecase = GitLabSearchProjUseCase()
-    usecase.on_searching().subscribe(ConsoleProjectResultObserver(param=param))
+def __search_in_project(param: GitLabParam):
+    usecase = GitLabSearchProjectUseCase()
+    usecase.on_searching().subscribe(GitLabPrintProjectObserver(param=param))
     usecase.search(param.input_project, param.keyword)
 
 

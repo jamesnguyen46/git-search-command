@@ -1,7 +1,10 @@
+import abc
+import types
+import json
+from typing import Any
 from enum import Enum
-from http import HTTPStatus
-from urllib.parse import urlparse, urljoin
-import requests
+from urllib.parse import urljoin
+from requests import request, Response
 from gsc.utils import json_serialize
 from gsc.constants import DEFAULT_TIMEOUT
 
@@ -14,35 +17,14 @@ class HttpMethod(Enum):
     DELETE = 5
 
 
-class Response:
-    def __init__(self) -> None:
-        self.url = None
-        self.status_code = None
-        self.json = None
-        self.binary = None
-        self.exception = None
-        self.pagination_links = None
-
-    @property
-    def status_ok(self) -> bool:
-        if self.status_code == HTTPStatus.OK:
-            return True
-        return False
-
-    @property
-    def endpoint(self):
-        return urlparse(self.url).hostname
-
-    @property
-    def api_path(self):
-        return urlparse(self.url).path
-
-
-class Request:
-    def __init__(self, method: HttpMethod, path: str, headers: dict = None):
+class Request(abc.ABC):
+    def __init__(
+        self, method: HttpMethod, path: str, response_model, headers: dict = None
+    ):
         self.path = path if path is not None else ""
         self.method = method
         self.headers = headers
+        self.response_model = response_model
 
     def __call__(self, func):
         def wrapper(obj, *args, **kwargs):
@@ -58,12 +40,13 @@ class Request:
             req_body = param_dict if body_required else None
             req_params = param_dict if not body_required else None
 
-            return self.send(
+            response = self.send(
                 urljoin(obj.host, req_path),
                 obj.default_header,
                 req_params,
                 json_serialize(req_body),
             )
+            return self.__convert_to_model(self.response_model, response)
 
         return wrapper
 
@@ -79,7 +62,7 @@ class Request:
             pass
 
         try:
-            response = requests.request(
+            response = request(
                 method=self.method.name.upper(),
                 url=url,
                 headers=req_header,
@@ -88,28 +71,41 @@ class Request:
                 timeout=DEFAULT_TIMEOUT,
             )
             response.raise_for_status()
-            return self.__handle_success_response(response)
+            return response
         except Exception as err:
-            return self.__handle_error(url, err)
+            raise err
 
-    def __handle_success_response(self, resp: requests.Response) -> Response:
-        response = Response()
-        response.url = resp.url
-        response.status_code = resp.status_code
-        response.pagination_links = resp.links
+    def __convert_to_model(self, model_cls, response: Any):
+        if model_cls is None:
+            raise TypeError(f"{model_cls} is not supported.")
 
-        try:
-            response.json = resp.json()
-            response.binary = resp.content
-        except Exception as err:
-            response.exception = err
-        return response
+        if not isinstance(response, (Response, types.GeneratorType)):
+            raise TypeError(f"{type(response)} type is not supported.")
 
-    def __handle_error(self, url: str, exc: Exception) -> Response:
-        response = Response()
-        response.url = url
-        response.exception = exc
-        return response
+        if isinstance(response, types.GeneratorType):
+            return self.__convert_generator(model_cls, response)
+
+        return self.__convert_object(model_cls, response)
+
+    def __convert_object(self, model_cls, response: Response):
+        data = json.loads(response.content)
+
+        if isinstance(data, list):
+            return [model_cls(**item) for item in data]
+
+        return [model_cls(**data)]
+
+    def __convert_generator(self, model_cls, response: types.GeneratorType):
+        for res in response:
+            data = json.loads(res.content)
+
+            if isinstance(data, dict):
+                yield model_cls(**data)
+            elif isinstance(data, list):
+                for item in data:
+                    yield model_cls(**item)
+            else:
+                pass
 
 
 class Api:
@@ -119,8 +115,8 @@ class Api:
 
 
 class GetRequest(Request):
-    def __init__(self, path: str = "", headers: object = None):
-        super().__init__(HttpMethod.GET, path, headers)
+    def __init__(self, path: str, response_model, headers: dict = None):
+        super().__init__(HttpMethod.GET, path, response_model, headers)
 
 
 class GetRequestAutoFetchPagination(GetRequest):
@@ -136,22 +132,22 @@ class GetRequestAutoFetchPagination(GetRequest):
 
             yield response
 
-            if "next" not in response.pagination_links:
+            if "next" not in response.links:
                 break
 
-            _url = response.pagination_links["next"]["url"]
+            _url = response.links["next"]["url"]
 
 
 class PostRequest(Request):
-    def __init__(self, path: str = "", headers: object = None):
-        super().__init__(HttpMethod.POST, path, headers)
+    def __init__(self, path: str, response_model, headers: dict = None):
+        super().__init__(HttpMethod.POST, path, response_model, headers)
 
 
 class PutRequest(Request):
-    def __init__(self, path: str = "", headers: object = None):
-        super().__init__(HttpMethod.PUT, path, headers)
+    def __init__(self, path: str, response_model, headers: dict = None):
+        super().__init__(HttpMethod.PUT, path, response_model, headers)
 
 
 class DeleteRequest(Request):
-    def __init__(self, path: str = "", headers: object = None):
-        super().__init__(HttpMethod.DELETE, path, headers)
+    def __init__(self, path: str, response_model, headers: dict = None):
+        super().__init__(HttpMethod.DELETE, path, response_model, headers)

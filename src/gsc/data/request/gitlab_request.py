@@ -1,10 +1,16 @@
-from gsc.request.request_wrapper import Api, GetRequest, GetRequestAutoFetchPagination
-from gsc.config import GitlabConfig
+from gsc.data.request.rx_task import RxTask
+from gsc.data.request.request_wrapper import (
+    Api,
+    GetRequest,
+    GetRequestAutoFetchPagination,
+)
+from gsc.config import GitLabConfig
+from gsc.data.response.gitlab_response import FileResponse, ProjectResponse
 
 
 class GitLabApi(Api):
     def __init__(self) -> None:
-        config = GitlabConfig()
+        config = GitLabConfig()
         selected_env = config.get_session_env()
         super().__init__(
             selected_env.host_name,
@@ -15,8 +21,11 @@ class GitLabApi(Api):
         )
 
 
-class ProjectApi(GitLabApi):
-    @GetRequestAutoFetchPagination(path="api/v4/groups/{group_name}/projects")
+class ProjectRequest(GitLabApi):
+    @RxTask
+    @GetRequestAutoFetchPagination(
+        path="api/v4/groups/{group_name}/projects", response_model=ProjectResponse
+    )
     def project_list(self, group_name: str, limit: int):
         return {"group_name": group_name}, {
             "page": 1,
@@ -25,13 +34,15 @@ class ProjectApi(GitLabApi):
             "sort": "asc",
         }
 
-    @GetRequest(path="api/v4/projects/{proj_id}")
+    @RxTask
+    @GetRequest(path="api/v4/projects/{proj_id}", response_model=ProjectResponse)
     def project_info(self, proj_id: int):
         return {"proj_id": proj_id}, None
 
 
-class SearchApi(GitLabApi):
-    @GetRequest(path="api/v4/projects/{proj_id}/search")
+class SearchRequest(GitLabApi):
+    @RxTask
+    @GetRequest(path="api/v4/projects/{proj_id}/search", response_model=FileResponse)
     def search_in_project(self, proj_id: int, keyword: str):
         return {"proj_id": proj_id}, {
             "scope": "blobs",

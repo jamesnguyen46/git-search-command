@@ -13,7 +13,12 @@ disable=
     # no-self-use
     R0201,
     # import-error
-    E0401
+    E0401,
+    # no-member
+    E1101,
+    # duplicate-code
+    R0801
 
 [FORMAT]
+
 max-line-length=120

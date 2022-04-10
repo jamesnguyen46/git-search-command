@@ -1,6 +1,6 @@
 from os.path import join, dirname
 import dotenv
-from gsc.entities.base import BaseModel
+from gsc.entities.base_model import BaseModel
 
 DEFAULT_ENV = "DEFAULT_ENV"
 SESSION_ENV = "SESSION_ENV"
@@ -120,5 +120,5 @@ class EnvConfig(BaseConfig):
         ]
 
 
-class GitlabConfig(EnvConfig):
+class GitLabConfig(EnvConfig):
     pass

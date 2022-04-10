@@ -1,25 +1,22 @@
-from gsc.entities.base import BaseModel
+from gsc.entities.base_model import BaseModel
 
 
-class Project:
-    def __init__(self, **kwargs):
+class Project(BaseModel):
+    def __init__(self):
         # pylint: disable=C0103
-        self.id = kwargs.get("id")
-        self.name = kwargs.get("name")
-        self.web_url = kwargs.get("web_url")
+        self.id = None
+        self.name = None
+        self.url = None
 
 
-class FileName(BaseModel):
-    def __init__(self, **kwargs):
-        self.name = kwargs.get("basename")
-        self.path = kwargs.get("path")
-        self.ref = kwargs.get("ref")
-        self.start_lines = []
-        self.start_lines.append(kwargs.get("startline"))
-        self.project_id = kwargs.get("project_id")
-        self.project_url = ""
-        self.data_preview = kwargs.get("data")
+class File(BaseModel):
+    def __init__(self):
+        self.name = None
+        self.path = None
+        self.ref = None
+        self.project_url = None
+        self.data_preview = None
 
     @property
-    def web_url(self):
+    def url(self):
         return f"{self.project_url}/-/blob/{self.ref}/{self.path}"
