@@ -1,3 +1,4 @@
+import abc
 from os.path import join, dirname
 import dotenv
 from gsc.entities.base_model import BaseModel
@@ -13,7 +14,7 @@ class Env(BaseModel):
         self.private_token = kwargs.get("private_token")
 
 
-class BaseConfig:
+class BaseConfig(abc.ABC):
     def __init__(self, file_name: str) -> None:
         self._config_path = join(dirname(__file__), f"{file_name.lower()}.env")
         self.__reload_keys()

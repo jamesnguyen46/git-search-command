@@ -1,10 +1,12 @@
 import abc
+import threading
 import types
 import json
 from typing import Any
 from enum import Enum
 from urllib.parse import urljoin
 from requests import request, Response
+import gsc
 from gsc.utils import json_serialize
 from gsc.constants import DEFAULT_TIMEOUT
 
@@ -25,6 +27,7 @@ class Request(abc.ABC):
         self.method = method
         self.headers = headers
         self.response_model = response_model
+        self.__lock = None
 
     def __call__(self, func):
         def wrapper(obj, *args, **kwargs):
@@ -33,8 +36,9 @@ class Request(abc.ABC):
 
             path_dict, param_dict = func(obj, *args, **kwargs)
 
+            req_path = self.path
             if path_dict is not None:
-                req_path = self.path.format_map(path_dict)
+                req_path = req_path.format_map(path_dict)
 
             body_required = self.method not in (HttpMethod.GET, HttpMethod.DELETE)
             req_body = param_dict if body_required else None
@@ -69,6 +73,7 @@ class Request(abc.ABC):
                 params=params,
                 data=data,
                 timeout=DEFAULT_TIMEOUT,
+                hooks={"response": self.__debug_request if gsc.__ID_DEBUG__ else None},
             )
             response.raise_for_status()
             return response
@@ -106,6 +111,21 @@ class Request(abc.ABC):
                     yield model_cls(**item)
             else:
                 pass
+
+    def __debug_request(self, response, *_, **__):
+        if not self.__lock:
+            self.__lock = threading.Lock()
+        thread = threading.Thread(
+            target=self.__print_thread_task, args=(self.__lock, response)
+        )
+        thread.start()
+        thread.join()
+
+    def __print_thread_task(self, lock, response):
+        lock.acquire()
+        print(f"Request  --> {response.request.method} {response.request.url}")
+        print(f"Response <-- {response.status_code} {response.reason}\n")
+        lock.release()
 
 
 class Api:

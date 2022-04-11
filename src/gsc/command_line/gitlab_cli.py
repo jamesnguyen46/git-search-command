@@ -1,4 +1,5 @@
 import click
+import gsc
 from gsc.utils import is_valid_environment_name
 from gsc.command_line import keep_main_thread_running
 from gsc.command_line.observer.gitlab_observer import (
@@ -105,6 +106,14 @@ def environment(ctx, **kwargs):
     metavar="<file_path>",
     help="Export the search result to file, support txt and markdown file.",
 )
+@click.option(
+    "-d",
+    "--debug",
+    "debug",
+    is_flag=True,
+    default=False,
+    help="Enable debug logging of HTTP request.",
+)
 @click.pass_context
 def search(ctx, **kwargs):
     config = GitLabConfig()
@@ -130,6 +139,9 @@ def search(ctx, **kwargs):
             default_env = config.get_default_env()
             param.env_name = default_env.name
             config.set_session_env(default_env.name)
+
+        if kwargs.get("debug"):
+            gsc.__ID_DEBUG__ = True
 
         click.clear()
         if param.input_project:

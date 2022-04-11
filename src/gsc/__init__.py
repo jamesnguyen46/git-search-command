@@ -1,5 +1,7 @@
 from gsc.command_line import cli
 
+__ID_DEBUG__ = False
+
 
 def main():
     cli.app()

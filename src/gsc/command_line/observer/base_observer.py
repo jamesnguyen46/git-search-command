@@ -3,6 +3,7 @@ import os.path
 from typing import Any, Optional
 import click
 from rx.core import typing, Observer
+import gsc
 
 
 class PrintParam(abc.ABC):
@@ -49,6 +50,9 @@ class BasePrintObserver(Observer, abc.ABC):
         raise NotImplementedError
 
     def echo(self, msg, url=None, **styles):
+        if gsc.__ID_DEBUG__:
+            return
+
         click.secho(msg, **styles)
 
         if self._export_file:
