@@ -5,23 +5,39 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Debug - Module",
+            "type": "python",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "python": "${workspaceFolder}/.venv/bin/python",
+            "module": "gsc",
+            "args": [
+                // Input param to self-test
+            ],
+            "justMyCode": false,
+            "windows": {
+                "python": "${workspaceFolder}\\.env\\Scripts\\python.exe",
+                "module": "gsc",
+                "args": [
+                    // Input param to self-test
+                ],
+                "justMyCode": false
+            },
+        },
+        {
             "name": "Debug - Current file",
             "type": "python",
             "request": "launch",
             "cwd": "${workspaceFolder}",
-            "python":"${workspaceFolder}/.venv/bin/python",
-            "envFile": "${workspaceFolder}/.vscode/test.env",
+            "python": "${workspaceFolder}/.venv/bin/python",
             "program": "${file}",
             "console": "integratedTerminal",
+            "justMyCode": false,
             "windows": {
                 "python": "${workspaceFolder}\\.env\\Scripts\\python.exe",
-                "envFile": "${workspaceFolder}\\.vscode\\test.env",
-                "program": ".\\src\\git_search\\__init__.py",
-                "args": [
-                    "${config:project.debug.args_keyword}",
-                    "-g",
-                    "${config:project.debug.args_group_name}"
-                ]
+                "program": "${file}",
+                "console": "integratedTerminal",
+                "justMyCode": false
             }
         }
     ]
