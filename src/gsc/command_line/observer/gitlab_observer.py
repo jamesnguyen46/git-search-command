@@ -144,5 +144,5 @@ class GitLabPrintObserver(BasePrintObserver):
     def print(self, msg, **styles):
         if self.param.is_debug:
             return
-        
+
         click.secho(msg, **styles)

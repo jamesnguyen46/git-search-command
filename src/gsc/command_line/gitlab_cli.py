@@ -135,7 +135,7 @@ def search(ctx, **kwargs):
             output_path=output_path,
             project_id=kwargs.get("project"),
             group=kwargs.get("group"),
-            is_debug=kwargs.get("debug") or False
+            is_debug=kwargs.get("debug") or False,
         )
         AppConfig().set_debug(param.is_debug)
 
