@@ -16,7 +16,7 @@
             ],
             "justMyCode": false,
             "windows": {
-                "python": "${workspaceFolder}\\.env\\Scripts\\python.exe",
+                "python": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
                 "module": "gsc",
                 "args": [
                     // Input param to self-test
@@ -34,7 +34,7 @@
             "console": "integratedTerminal",
             "justMyCode": false,
             "windows": {
-                "python": "${workspaceFolder}\\.env\\Scripts\\python.exe",
+                "python": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
                 "program": "${file}",
                 "console": "integratedTerminal",
                 "justMyCode": false

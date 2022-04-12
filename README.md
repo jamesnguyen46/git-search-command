@@ -125,7 +125,7 @@ python -m pip install -e .[develop]
 
 #### Vscode task
 
-1. `Ctrl Shift B` to select `Tasks: Run Task`
+1. Open `View > Command Palette`, then select `Tasks: Run Task`
 2. Run `Install DEV environment` task
 
 ### Build
