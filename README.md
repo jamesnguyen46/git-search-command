@@ -93,10 +93,9 @@ Options:
                               id.
   -e, --environment <string>  Select the environment for searching, if not
                               declare, default environment has been used.
-  -v                          Show result preview, available only when
-                              searching project, not in group.
-  -o, --output <file_path>    Export the search result to file, support txt
-                              and markdown file.
+  -o, --output <file_path>    Export the search result to markdown file with
+                              extension .md or .markdown.
+  -d, --debug                 Enable debug logging of HTTP request.
   -h, --help                  Show this message and exit.
 ```
 

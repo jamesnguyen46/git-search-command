@@ -1,3 +1,4 @@
+import os.path
 import click
 from gsc.utils import is_valid_environment_name
 from gsc.command_line import keep_main_thread_running
@@ -103,7 +104,7 @@ def environment(ctx, **kwargs):
     "--output",
     type=str,
     metavar="<file_path>",
-    help="Export the search result to file, support txt and markdown file.",
+    help="Export the search result to markdown file with extension .md or .markdown.",
 )
 @click.option(
     "-d",
@@ -123,9 +124,15 @@ def search(ctx, **kwargs):
         return
 
     if kwargs.get("keyword"):
+        output_path = kwargs.get("output")
+        if output_path and not __is_validate_output_path(output_path):
+            click.secho("Error: Output file type is not supported.")
+            click.secho("Try 'gsc gl search -h' for help.")
+            return
+
         param = GitLabParam(
             keyword=kwargs.get("keyword"),
-            output_path=kwargs.get("output"),
+            output_path=output_path,
             project_id=kwargs.get("project"),
             group=kwargs.get("group"),
         )
@@ -148,6 +155,10 @@ def search(ctx, **kwargs):
             __search_in_group(param)
     else:
         click.secho(search.get_help(ctx))
+
+
+def __is_validate_output_path(path: str):
+    return os.path.splitext(path)[1] in GitLabExportObserver.MARKDOWN_EXTENSION
 
 
 @keep_main_thread_running

@@ -26,11 +26,12 @@ class GitLabExportObserver(BasePrintObserver):
         on_completed: Optional[typing.OnCompleted] = None,
         param: GitLabParam = None,
     ) -> None:
-        self._is_markdown = False
         self._export_file = None
         self.repo_count = 0
+        path = param.output_path
+        if os.path.splitext(path)[1] not in self.MARKDOWN_EXTENSION:
+            raise NotImplementedError("Only support markdown file.")
         if param.output_path:
-            path = param.output_path
             self._is_markdown = os.path.splitext(path)[1] in self.MARKDOWN_EXTENSION
             self._export_file = click.open_file(path, mode="w") if path else None
         super().__init__(on_next, on_error, on_completed, param)
