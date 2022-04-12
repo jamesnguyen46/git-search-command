@@ -95,14 +95,14 @@ class GitLabPrintObserver(BasePrintObserver):
         super().__init__(on_next, on_error, on_completed, param)
 
     def on_print_start(self) -> None:
-        click.secho(
+        self.print(
             f'[GitLab] ("{self.param.env_name}" env) Searching for "{self.param.keyword}" ...'
         )
 
     def on_print_result(self, value: Any) -> None:
         project: Project = value[0]
         files: File = value[1]
-        click.secho("------------------------")
+        self.print("------------------------")
         if files:
             # Print project
             self.repo_count += 1
@@ -111,32 +111,38 @@ class GitLabPrintObserver(BasePrintObserver):
                 proj_msg = (
                     f"[{project.id}] (❗Archived) {project.name} - {len(files)} file(s)"
                 )
-            click.secho(
+            self.print(
                 proj_msg,
                 fg="bright_magenta",
             )
             # Print files
             for file in files:
-                click.secho(f"{file.path}")
+                self.print(f"{file.path}")
         else:
             # Print project
-            click.secho(
+            self.print(
                 f"[{project.id}] {project.name}",
                 fg="bright_magenta",
                 dim=True,
             )
             # Print files
-            click.secho("No results found", dim=True)
+            self.print("No results found", dim=True)
 
     @finish_main_thread
     def on_print_end(self) -> None:
-        click.secho("------------------------")
+        self.print("------------------------")
         if self.param.is_search_group:
             count_msg = self.repo_count if self.repo_count != 0 else "NO"
             msg = f'There are {count_msg} repository(s) containing "{self.param.keyword}".'
-            click.secho(msg)
+            self.print(msg)
         self.repo_count = 0
 
     @finish_main_thread
     def on_print_error(self, error: Exception) -> None:
-        click.secho(f"[Error] {error}", fg="bright_red")
+        self.print(f"[Error] {error}", fg="bright_red")
+
+    def print(self, msg, **styles):
+        if self.param.is_debug:
+            return
+        
+        click.secho(msg, **styles)

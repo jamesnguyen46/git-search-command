@@ -135,7 +135,9 @@ def search(ctx, **kwargs):
             output_path=output_path,
             project_id=kwargs.get("project"),
             group=kwargs.get("group"),
+            is_debug=kwargs.get("debug") or False
         )
+        AppConfig().set_debug(param.is_debug)
 
         session_env = kwargs.get("session_env")
         if session_env:
@@ -145,8 +147,6 @@ def search(ctx, **kwargs):
             default_env = config.get_default_env()
             param.env_name = default_env.name
             config.set_session_env(default_env.name)
-
-        AppConfig().set_debug(kwargs.get("debug") or False)
 
         click.clear()
         if param.input_project:
@@ -166,7 +166,7 @@ def __search_in_group(param: GitLabParam):
     param.is_search_group = True
     usecase = GitLabSearchGroupUseCase()
     usecase.on_searching().subscribe(GitLabPrintObserver(param=param))
-    if param.output_path:
+    if param.output_path and not param.is_debug:
         usecase.on_searching().subscribe(GitLabExportObserver(param=param))
     usecase.search(param.input_group, param.keyword)
 
@@ -175,7 +175,7 @@ def __search_in_group(param: GitLabParam):
 def __search_in_project(param: GitLabParam):
     usecase = GitLabSearchProjectUseCase()
     usecase.on_searching().subscribe(GitLabPrintObserver(param=param))
-    if param.output_path:
+    if param.output_path and not param.is_debug:
         usecase.on_searching().subscribe(GitLabExportObserver(param=param))
     usecase.search(param.input_project, param.keyword)
 

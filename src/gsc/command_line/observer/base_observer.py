@@ -8,6 +8,7 @@ class PrintParam(abc.ABC):
         self.env_name = kwargs.get("env_name")
         self.keyword = kwargs.get("keyword")
         self.output_path = kwargs.get("output_path")
+        self.is_debug = kwargs.get("is_debug")
 
 
 class BasePrintObserver(Observer, abc.ABC):
