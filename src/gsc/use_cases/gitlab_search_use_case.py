@@ -3,7 +3,7 @@ from rx.subject import ReplaySubject
 from rx import combine_latest, just, operators as ops
 from gsc.entities.gitlab_model import Project
 from gsc.use_cases.base_use_case import BaseUseCase
-from gsc.data.request.rx_task import rx_pool_scheduler
+from gsc.core.rx_task import rx_pool_scheduler
 from gsc.data.repository.gitlab_repository import (
     GitLabProjectRepository,
     GitLabSearchRepository,
@@ -54,7 +54,7 @@ class GitLabSearchGroupUseCase(BaseUseCase):
             ops.flat_map(
                 lambda group: group.pipe(
                     ops.observe_on(rx_pool_scheduler()),
-                    ops.map(lambda repo: self.__search_in_project(repo, keyword)),
+                    ops.map(lambda project: self.__search_in_project(project, keyword)),
                 )
             ),
             ops.flat_map(lambda item: item),

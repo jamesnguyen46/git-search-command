@@ -1,10 +1,10 @@
-from gsc.data.request.rx_task import RxTask
-from gsc.data.request.request_wrapper import (
+from gsc.core.rx_task import RxTask
+from gsc.core.request_wrapper import (
     Api,
     GetRequest,
     GetRequestAutoFetchPagination,
 )
-from gsc.config import GitLabConfig
+from gsc.config import AppConfig, GitLabConfig
 from gsc.data.response.gitlab_response import FileResponse, ProjectResponse
 
 
@@ -18,6 +18,7 @@ class GitLabApi(Api):
                 "Content-Type": "application/json;charset=UTF-8",
                 "PRIVATE-TOKEN": selected_env.private_token,
             },
+            AppConfig().is_debug(),
         )
 
 

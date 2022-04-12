@@ -3,9 +3,6 @@ from os.path import join, dirname
 import dotenv
 from gsc.entities.base_model import BaseModel
 
-DEFAULT_ENV = "DEFAULT_ENV"
-SESSION_ENV = "SESSION_ENV"
-
 
 class Env(BaseModel):
     def __init__(self, **kwargs) -> None:
@@ -44,17 +41,33 @@ class BaseConfig(abc.ABC):
         self._config_dict = dotenv.dotenv_values(self._config_path)
 
 
+class AppConfig(BaseConfig):
+    DEBUG_FLAG = "DEBUG"
+
+    def __init__(self, _: str = None) -> None:
+        super().__init__(type(self).__name__)
+
+    def set_debug(self, debug):
+        super().set_key(self.DEBUG_FLAG, str(debug))
+
+    def is_debug(self):
+        return super().get_key(self.DEBUG_FLAG) == "True"
+
+
 class EnvConfig(BaseConfig):
+    DEFAULT_ENV = "DEFAULT_ENV"
+    SESSION_ENV = "SESSION_ENV"
+
     def __init__(self, _=None) -> None:
         super().__init__(type(self).__name__)
-        self._exclude_keys = [DEFAULT_ENV, SESSION_ENV]
+        self._exclude_keys = [self.DEFAULT_ENV, self.SESSION_ENV]
         self._all_envs = None
         self.__reload_envs()
 
     def set_env(self, env: Env):
         # Automatically set new env as default if there is no any env before
         if len(self._all_envs) == 0:
-            super().set_key(DEFAULT_ENV, env.name)
+            super().set_key(self.DEFAULT_ENV, env.name)
 
         super().set_key(env.name, env.to_json_string())
         self.__reload_envs()
@@ -88,30 +101,30 @@ class EnvConfig(BaseConfig):
         return self.has_key(name)
 
     def get_default_env(self) -> Env:
-        default_env_key = super().get_key(DEFAULT_ENV)
+        default_env_key = super().get_key(self.DEFAULT_ENV)
         return self.get_env(default_env_key)
 
     def set_default_env(self, name: str):
         if not self.is_env_existed(name):
             return False, ValueError("Value is not existed.")
 
-        return super().set_key(DEFAULT_ENV, name)
+        return super().set_key(self.DEFAULT_ENV, name)
 
     def remove_default_env(self):
-        return super().remove_key(DEFAULT_ENV)
+        return super().remove_key(self.DEFAULT_ENV)
 
     def is_default_env(self, name: str):
-        return name == super().get_key(DEFAULT_ENV)
+        return name == super().get_key(self.DEFAULT_ENV)
 
     def get_session_env(self) -> Env:
-        session_env_key = super().get_key(SESSION_ENV)
+        session_env_key = super().get_key(self.SESSION_ENV)
         return self.get_env(session_env_key)
 
     def set_session_env(self, name: str):
         if not self.is_env_existed(name):
             return False, ValueError("Value is not existed.")
 
-        return super().set_key(SESSION_ENV, name)
+        return super().set_key(self.SESSION_ENV, name)
 
     def __reload_envs(self):
         self._all_envs = [

@@ -6,7 +6,6 @@ from typing import Any
 from enum import Enum
 from urllib.parse import urljoin
 from requests import request, Response
-import gsc
 from gsc.utils import json_serialize
 from gsc.constants import DEFAULT_TIMEOUT
 
@@ -28,12 +27,14 @@ class Request(abc.ABC):
         self.headers = headers
         self.response_model = response_model
         self.__lock = None
+        self.__object = None
 
     def __call__(self, func):
         def wrapper(obj, *args, **kwargs):
             if not isinstance(obj, Api):
                 raise TypeError("Object type is not supported.")
 
+            self.__object = obj
             path_dict, param_dict = func(obj, *args, **kwargs)
 
             req_path = self.path
@@ -73,7 +74,9 @@ class Request(abc.ABC):
                 params=params,
                 data=data,
                 timeout=DEFAULT_TIMEOUT,
-                hooks={"response": self.__debug_request if gsc.__ID_DEBUG__ else None},
+                hooks={
+                    "response": self.__debug_request if self.__object.is_debug else None
+                },
             )
             response.raise_for_status()
             return response
@@ -129,9 +132,10 @@ class Request(abc.ABC):
 
 
 class Api:
-    def __init__(self, host: str, default_header: dict = None):
+    def __init__(self, host: str, default_header: dict = None, is_debug=False):
         self.host = host
         self.default_header = default_header
+        self.is_debug = is_debug
 
 
 class GetRequest(Request):

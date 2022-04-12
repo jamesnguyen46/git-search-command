@@ -6,6 +6,7 @@ class Project(BaseModel):
         # pylint: disable=C0103
         self.id = None
         self.name = None
+        self.archived = False
         self.url = None
 
 

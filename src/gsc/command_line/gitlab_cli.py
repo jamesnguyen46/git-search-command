@@ -1,13 +1,12 @@
 import click
-import gsc
 from gsc.utils import is_valid_environment_name
 from gsc.command_line import keep_main_thread_running
 from gsc.command_line.observer.gitlab_observer import (
     GitLabParam,
-    GitLabPrintProjectObserver,
-    GitLabPrintGroupObserver,
+    GitLabPrintObserver,
+    GitLabExportObserver,
 )
-from gsc.config import Env, EnvConfig, GitLabConfig
+from gsc.config import AppConfig, Env, EnvConfig, GitLabConfig
 from gsc.use_cases.gitlab_search_use_case import (
     GitLabSearchProjectUseCase,
     GitLabSearchGroupUseCase,
@@ -140,8 +139,7 @@ def search(ctx, **kwargs):
             param.env_name = default_env.name
             config.set_session_env(default_env.name)
 
-        if kwargs.get("debug"):
-            gsc.__ID_DEBUG__ = True
+        AppConfig().set_debug(kwargs.get("debug") or False)
 
         click.clear()
         if param.input_project:
@@ -154,15 +152,20 @@ def search(ctx, **kwargs):
 
 @keep_main_thread_running
 def __search_in_group(param: GitLabParam):
+    param.is_search_group = True
     usecase = GitLabSearchGroupUseCase()
-    usecase.on_searching().subscribe(GitLabPrintGroupObserver(param=param))
+    usecase.on_searching().subscribe(GitLabPrintObserver(param=param))
+    if param.output_path:
+        usecase.on_searching().subscribe(GitLabExportObserver(param=param))
     usecase.search(param.input_group, param.keyword)
 
 
 @keep_main_thread_running
 def __search_in_project(param: GitLabParam):
     usecase = GitLabSearchProjectUseCase()
-    usecase.on_searching().subscribe(GitLabPrintProjectObserver(param=param))
+    usecase.on_searching().subscribe(GitLabPrintObserver(param=param))
+    if param.output_path:
+        usecase.on_searching().subscribe(GitLabExportObserver(param=param))
     usecase.search(param.input_project, param.keyword)
 
 

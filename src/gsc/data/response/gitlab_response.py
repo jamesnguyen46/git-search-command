@@ -6,6 +6,7 @@ class ProjectResponse(BaseModel):
         # pylint: disable=C0103
         self.id = kwargs.get("id")
         self.name = kwargs.get("name")
+        self.archived = kwargs.get("archived")
         self.web_url = kwargs.get("web_url")
 
 

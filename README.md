@@ -163,7 +163,7 @@ Run `Build Project` task.
 
 ### GitLab
 
-- [API Project](https://docs.gitlab.com/ee/api/projects.html)
-- [API Group](https://docs.gitlab.com/ee/api/groups.html)
-- [API Search](https://docs.gitlab.com/ee/api/search.html)
+- [Project Api](https://docs.gitlab.com/ee/api/projects.html)
+- [Group Api](https://docs.gitlab.com/ee/api/groups.html)
+- [Search Api](https://docs.gitlab.com/ee/api/search.html)
 - [Search Rate Limit](https://docs.gitlab.com/ee/administration/instance_limits.html#search-rate-limit)

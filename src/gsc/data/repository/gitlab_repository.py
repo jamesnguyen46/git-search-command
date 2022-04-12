@@ -12,17 +12,20 @@ class GitLabProjectRepository(BaseRepository):
         self._request = ProjectRequest()
 
     def project_info(self, project_id: int) -> Observable:
-        return self._request.project_info(project_id).pipe(ops.map(self.__mapping))
+        return self._request.project_info(project_id).pipe(
+            ops.map(self.__project_mapping)
+        )
 
     def project_list(self, group_name: str) -> Observable:
         return self._request.project_list(group_name, PAGING_ITEM_NUMBER).pipe(
-            ops.map(self.__mapping)
+            ops.map(self.__project_mapping)
         )
 
-    def __mapping(self, response: ProjectResponse) -> Project:
+    def __project_mapping(self, response: ProjectResponse) -> Project:
         project = Project()
         project.id = response.id
         project.name = response.name
+        project.archived = response.archived
         project.url = response.web_url
         return project
 
@@ -34,10 +37,10 @@ class GitLabSearchRepository(BaseRepository):
 
     def search(self, project_id: int, keyword: str) -> Observable:
         return self._request.search_in_project(project_id, keyword).pipe(
-            ops.distinct(lambda item: item.path), ops.map(self.__mapping)
+            ops.distinct(lambda item: item.path), ops.map(self.__file_mapping)
         )
 
-    def __mapping(self, response: FileResponse) -> File:
+    def __file_mapping(self, response: FileResponse) -> File:
         file = File()
         file.name = response.name
         file.path = response.path
