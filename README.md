@@ -166,3 +166,8 @@ Run `Build Project` task.
 - [Group Api](https://docs.gitlab.com/ee/api/groups.html)
 - [Search Api](https://docs.gitlab.com/ee/api/search.html)
 - [Search Rate Limit](https://docs.gitlab.com/ee/administration/instance_limits.html#search-rate-limit)
+
+### GitHub
+
+- [List repositories API for the authenticated user](https://docs.github.com/en/rest/reference/repos#list-repositories-for-the-authenticated-user)
+- [Search Code API](https://docs.github.com/en/rest/reference/search#search-code)

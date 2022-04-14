@@ -13,6 +13,7 @@
             "module": "gsc",
             "args": [
                 // Input param to self-test
+                "gl", "search", "chuck", "-g", "android"
             ],
             "justMyCode": false,
             "windows": {
