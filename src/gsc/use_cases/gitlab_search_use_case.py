@@ -23,12 +23,7 @@ class GitLabSearchProjectUseCase(BaseUseCase):
         combine_latest(
             self._project_repo.project_info(project_id),
             self._search_repo.search(project_id, keyword).pipe(ops.to_list()),
-        ).pipe(
-            ops.subscribe_on(rx_pool_scheduler()),
-            ops.map(self.__update_file_url),
-        ).subscribe(
-            self._on_searching
-        )
+        ).pipe(ops.map(self.__update_file_url),).subscribe(self._on_searching)
 
     def __update_file_url(self, value):
         project: Project = value[0]
@@ -42,6 +37,7 @@ class GitLabSearchProjectUseCase(BaseUseCase):
 class GitLabSearchGroupUseCase(BaseUseCase):
     def __init__(self) -> None:
         self._project_repo = GitLabProjectRepository()
+        self._search_repo = GitLabSearchRepository()
         self._on_searching = ReplaySubject()
 
     def on_searching(self) -> Observable:
@@ -49,11 +45,10 @@ class GitLabSearchGroupUseCase(BaseUseCase):
 
     def search(self, group_name: str, keyword: str) -> Observable:
         self._project_repo.project_list(group_name).pipe(
-            ops.subscribe_on(rx_pool_scheduler()),
             ops.group_by(lambda proj: proj),
             ops.flat_map(
                 lambda group: group.pipe(
-                    ops.observe_on(rx_pool_scheduler()),
+                    ops.observe_on(rx_pool_scheduler),
                     ops.map(lambda project: self.__search_in_project(project, keyword)),
                 )
             ),
@@ -63,9 +58,8 @@ class GitLabSearchGroupUseCase(BaseUseCase):
     def __search_in_project(self, project: Project, keyword: str):
         return combine_latest(
             just(project),
-            GitLabSearchRepository().search(project.id, keyword).pipe(ops.to_list()),
+            self._search_repo.search(project.id, keyword).pipe(ops.to_list()),
         ).pipe(
-            ops.subscribe_on(rx_pool_scheduler()),
             ops.do_action(on_next=self.__update_file_url),
         )
 

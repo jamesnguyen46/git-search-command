@@ -1,10 +1,12 @@
-from gsc.core.rx_task import RxTask
-from gsc.core.request_wrapper import (
-    Api,
-    GetRequest,
-    GetRequestAutoFetchPagination,
-)
 from gsc.config import AppConfig, GitLabConfig
+from gsc.core.request_decorator import (
+    Api,
+    get_request,
+    get_request_pagination,
+)
+from gsc.constants import GitLabConstant
+from gsc.core.rx_task import rx_task
+from gsc.core.rate_limit import rate_limit
 from gsc.data.response.gitlab_response import FileResponse, ProjectResponse
 
 
@@ -23,8 +25,8 @@ class GitLabApi(Api):
 
 
 class ProjectRequest(GitLabApi):
-    @RxTask
-    @GetRequestAutoFetchPagination(
+    @rx_task
+    @get_request_pagination(
         path="api/v4/groups/{group_name}/projects", response_model=ProjectResponse
     )
     def project_list(self, group_name: str, limit: int):
@@ -35,18 +37,22 @@ class ProjectRequest(GitLabApi):
             "sort": "asc",
         }
 
-    @RxTask
-    @GetRequest(path="api/v4/projects/{proj_id}", response_model=ProjectResponse)
+    @rx_task
+    @get_request(path="api/v4/projects/{proj_id}", response_model=ProjectResponse)
     def project_info(self, proj_id: int):
         return {"proj_id": proj_id}, None
 
 
 class SearchRequest(GitLabApi):
-    @RxTask
-    @GetRequest(path="api/v4/projects/{proj_id}/search", response_model=FileResponse)
-    def search_in_project(self, proj_id: int, keyword: str):
+    @rx_task
+    @rate_limit(
+        calls=GitLabConstant.SEARCH_RATE_LIMIT_CALLS,
+        period=GitLabConstant.SEARCH_RATE_LIMIT_PERIOD,
+    )
+    @get_request(path="api/v4/projects/{proj_id}/search", response_model=FileResponse)
+    def search_in_project(self, proj_id: int, keyword: str, limit: int):
         return {"proj_id": proj_id}, {
             "scope": "blobs",
             "search": keyword,
-            "per_page": 100,
+            "per_page": limit,
         }

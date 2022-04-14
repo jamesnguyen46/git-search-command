@@ -1,4 +1,6 @@
 import abc
+from timeit import default_timer as timer
+from datetime import timedelta
 from typing import Any, Optional
 from rx.core import typing, Observer
 
@@ -21,6 +23,7 @@ class BasePrintObserver(Observer, abc.ABC):
     ) -> None:
         super().__init__(on_next, on_error, on_completed)
         self.param = param
+        self.start_time = timer()
         self.on_print_start()
 
     @abc.abstractmethod
@@ -32,7 +35,7 @@ class BasePrintObserver(Observer, abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def on_print_end(self) -> None:
+    def on_print_end(self, elapsed_time) -> None:
         raise NotImplementedError
 
     @abc.abstractmethod
@@ -43,7 +46,8 @@ class BasePrintObserver(Observer, abc.ABC):
         self.on_print_result(value)
 
     def on_completed(self) -> None:
-        self.on_print_end()
+        elapsed_time = timedelta(seconds=timer() - self.start_time)
+        self.on_print_end(elapsed_time)
 
     def on_error(self, error: Exception) -> None:
         self.on_print_error(error)

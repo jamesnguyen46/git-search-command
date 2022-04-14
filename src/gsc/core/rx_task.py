@@ -1,29 +1,26 @@
 import types
 import multiprocessing
+from functools import wraps
 from rx import create, core, operators as ops
 from rx.scheduler import ThreadPoolScheduler
 
-
-def rx_pool_scheduler():
-    # calculate number of CPUs, then create a ThreadPoolScheduler with that number of threads
-    optimal_thread_count = multiprocessing.cpu_count()
-    return ThreadPoolScheduler(optimal_thread_count)
+# calculate number of CPUs, then create a ThreadPoolScheduler with that number of threads
+optimal_thread_count = multiprocessing.cpu_count()
+rx_pool_scheduler = ThreadPoolScheduler(optimal_thread_count)
 
 
-# pylint: disable=C0103
-def RxTask(function):
+def rx_task(func):
+    @wraps(func)
     def wrapper(*args, **kwargs) -> core.Observable:
         def subscribe(observer, _=None):
             try:
-                res = function(*args, **kwargs)
+                res = func(*args, **kwargs)
                 observer.on_next(res)
                 observer.on_completed()
             except Exception as err:
                 observer.on_error(err)
 
-        return create(subscribe).pipe(
-            ops.subscribe_on(rx_pool_scheduler()), __flat_map()
-        )
+        return create(subscribe).pipe(ops.subscribe_on(rx_pool_scheduler), __flat_map())
 
     return wrapper
 

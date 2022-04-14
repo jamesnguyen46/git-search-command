@@ -32,7 +32,6 @@ class GitLabExportObserver(BasePrintObserver):
         if os.path.splitext(path)[1] not in self.MARKDOWN_EXTENSION:
             raise NotImplementedError("Only support markdown file.")
         if param.output_path:
-            self._is_markdown = os.path.splitext(path)[1] in self.MARKDOWN_EXTENSION
             self._export_file = click.open_file(path, mode="w") if path else None
         super().__init__(on_next, on_error, on_completed, param)
 
@@ -67,11 +66,11 @@ class GitLabExportObserver(BasePrintObserver):
         self.write_lines()
         self.write(f"[Error] {error}")
 
-    def on_print_end(self) -> None:
+    def on_print_end(self, elapsed_time) -> None:
         if self.param.is_search_group:
             self.write("---")
             count_msg = self.repo_count if self.repo_count != 0 else "NO"
-            msg = f'There are {count_msg} repository(s) containing "{self.param.keyword}".'
+            msg = f'[{elapsed_time}] There are {count_msg} repository(s) containing "{self.param.keyword}".'
             self.write(msg)
         self.repo_count = 0
 
@@ -129,11 +128,11 @@ class GitLabPrintObserver(BasePrintObserver):
             self.print("No results found", dim=True)
 
     @finish_main_thread
-    def on_print_end(self) -> None:
+    def on_print_end(self, elapsed_time) -> None:
         self.print("------------------------")
         if self.param.is_search_group:
             count_msg = self.repo_count if self.repo_count != 0 else "NO"
-            msg = f'There are {count_msg} repository(s) containing "{self.param.keyword}".'
+            msg = f'[{elapsed_time}] There are {count_msg} repository(s) containing "{self.param.keyword}".'
             self.print(msg)
         self.repo_count = 0
 

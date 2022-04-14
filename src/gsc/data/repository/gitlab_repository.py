@@ -1,5 +1,5 @@
 from rx import Observable, operators as ops
-from gsc.constants import PAGING_ITEM_NUMBER
+from gsc.constants import GitLabConstant
 from gsc.data.repository.base_repository import BaseRepository
 from gsc.data.request.gitlab_request import ProjectRequest, SearchRequest
 from gsc.data.response.gitlab_response import ProjectResponse, FileResponse
@@ -17,9 +17,9 @@ class GitLabProjectRepository(BaseRepository):
         )
 
     def project_list(self, group_name: str) -> Observable:
-        return self._request.project_list(group_name, PAGING_ITEM_NUMBER).pipe(
-            ops.map(self.__project_mapping)
-        )
+        return self._request.project_list(
+            group_name, GitLabConstant.GROUP_API_LIMIT
+        ).pipe(ops.map(self.__project_mapping))
 
     def __project_mapping(self, response: ProjectResponse) -> Project:
         project = Project()
@@ -36,8 +36,11 @@ class GitLabSearchRepository(BaseRepository):
         self._request = SearchRequest()
 
     def search(self, project_id: int, keyword: str) -> Observable:
-        return self._request.search_in_project(project_id, keyword).pipe(
-            ops.distinct(lambda item: item.path), ops.map(self.__file_mapping)
+        return self._request.search_in_project(
+            project_id, keyword, GitLabConstant.SEARCH_API_LIMIT
+        ).pipe(
+            ops.distinct(lambda item: item.path),
+            ops.map(self.__file_mapping),
         )
 
     def __file_mapping(self, response: FileResponse) -> File:

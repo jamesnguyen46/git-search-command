@@ -1,13 +1,17 @@
-import abc
-import threading
-import types
-import json
+from functools import wraps
 from typing import Any
 from enum import Enum
+import abc
+import threading
+import json
+import types
 from urllib.parse import urljoin
-from requests import request, Response
-from gsc.utils import json_serialize
-from gsc.constants import DEFAULT_TIMEOUT
+from requests.adapters import HTTPAdapter
+from urllib3.util import Retry
+import requests
+
+
+DEFAULT_TIMEOUT = 20
 
 
 class HttpMethod(Enum):
@@ -18,18 +22,34 @@ class HttpMethod(Enum):
     DELETE = 5
 
 
-class Request(abc.ABC):
+class RequestDecorator(abc.ABC):
+    # pylint: disable = R0913
     def __init__(
-        self, method: HttpMethod, path: str, response_model, headers: dict = None
+        self,
+        method: HttpMethod,
+        path: str,
+        response_model,
+        headers: dict = None,
+        timeout: int = None,
     ):
         self.path = path if path is not None else ""
         self.method = method
         self.headers = headers
         self.response_model = response_model
+        self.timeout = timeout or DEFAULT_TIMEOUT
         self.__lock = None
         self.__object = None
 
     def __call__(self, func):
+        def json_serialize(obj):
+            try:
+                return json.dumps(obj, ensure_ascii=False).encode("utf-8")
+            except TypeError:
+                return json.dumps(
+                    obj, default=lambda o: o.__dict__, ensure_ascii=False
+                ).encode("utf-8")
+
+        @wraps(func)
         def wrapper(obj, *args, **kwargs):
             if not isinstance(obj, Api):
                 raise TypeError("Object type is not supported.")
@@ -67,13 +87,21 @@ class Request(abc.ABC):
             pass
 
         try:
-            response = request(
+            retries = Retry(
+                total=3,
+                backoff_factor=10,
+                respect_retry_after_header=True,
+                status_forcelist=[429],
+            )
+            session = requests.Session()
+            session.mount(self.__object.host, HTTPAdapter(max_retries=retries))
+            response = session.request(
                 method=self.method.name.upper(),
                 url=url,
                 headers=req_header,
                 params=params,
                 data=data,
-                timeout=DEFAULT_TIMEOUT,
+                timeout=self.timeout,
                 hooks={
                     "response": self.__debug_request if self.__object.is_debug else None
                 },
@@ -82,12 +110,14 @@ class Request(abc.ABC):
             return response
         except Exception as err:
             raise err
+        finally:
+            session.close()
 
     def __convert_to_model(self, model_cls, response: Any):
         if model_cls is None:
             raise TypeError(f"{model_cls} is not supported.")
 
-        if not isinstance(response, (Response, types.GeneratorType)):
+        if not isinstance(response, (requests.Response, types.GeneratorType)):
             raise TypeError(f"{type(response)} type is not supported.")
 
         if isinstance(response, types.GeneratorType):
@@ -95,7 +125,7 @@ class Request(abc.ABC):
 
         return self.__convert_object(model_cls, response)
 
-    def __convert_object(self, model_cls, response: Response):
+    def __convert_object(self, model_cls, response: requests.Response):
         data = json.loads(response.content)
 
         if isinstance(data, list):
@@ -115,19 +145,21 @@ class Request(abc.ABC):
             else:
                 pass
 
-    def __debug_request(self, response, *_, **__):
+    def __debug_request(self, response: requests.Response, *_, **__):
         if not self.__lock:
-            self.__lock = threading.Lock()
+            self.__lock = threading.RLock()
         thread = threading.Thread(
             target=self.__print_thread_task, args=(self.__lock, response)
         )
         thread.start()
         thread.join()
 
-    def __print_thread_task(self, lock, response):
+    def __print_thread_task(self, lock, response: requests.Response):
         lock.acquire()
         print(f"Request  --> {response.request.method} {response.request.url}")
-        print(f"Response <-- {response.status_code} {response.reason}\n")
+        print(
+            f"Response <-- [{response.elapsed}] {response.status_code} {response.reason}\n"
+        )
         lock.release()
 
 
@@ -138,12 +170,14 @@ class Api:
         self.is_debug = is_debug
 
 
-class GetRequest(Request):
-    def __init__(self, path: str, response_model, headers: dict = None):
-        super().__init__(HttpMethod.GET, path, response_model, headers)
+class GetRequest(RequestDecorator):
+    def __init__(
+        self, path: str, response_model, headers: dict = None, timeout: int = None
+    ):
+        super().__init__(HttpMethod.GET, path, response_model, headers, timeout)
 
 
-class GetRequestAutoFetchPagination(GetRequest):
+class GetRequestPagination(GetRequest):
     def send(
         self, url: str, headers: dict = None, params: dict = None, data: dict = None
     ):
@@ -162,16 +196,31 @@ class GetRequestAutoFetchPagination(GetRequest):
             _url = response.links["next"]["url"]
 
 
-class PostRequest(Request):
-    def __init__(self, path: str, response_model, headers: dict = None):
-        super().__init__(HttpMethod.POST, path, response_model, headers)
+class PostRequest(RequestDecorator):
+    def __init__(
+        self, path: str, response_model, headers: dict = None, timeout: int = None
+    ):
+        super().__init__(HttpMethod.POST, path, response_model, headers, timeout)
 
 
-class PutRequest(Request):
-    def __init__(self, path: str, response_model, headers: dict = None):
-        super().__init__(HttpMethod.PUT, path, response_model, headers)
+class PutRequest(RequestDecorator):
+    def __init__(
+        self, path: str, response_model, headers: dict = None, timeout: int = None
+    ):
+        super().__init__(HttpMethod.PUT, path, response_model, headers, timeout)
 
 
-class DeleteRequest(Request):
-    def __init__(self, path: str, response_model, headers: dict = None):
-        super().__init__(HttpMethod.DELETE, path, response_model, headers)
+class DeleteRequest(RequestDecorator):
+    def __init__(
+        self, path: str, response_model, headers: dict = None, timeout: int = None
+    ):
+        super().__init__(HttpMethod.DELETE, path, response_model, headers, timeout)
+
+
+# Alias
+# pylint: disable=C0103
+get_request = GetRequest
+get_request_pagination = GetRequestPagination
+post_request = PostRequest
+put_request = PutRequest
+delete_request = DeleteRequest
