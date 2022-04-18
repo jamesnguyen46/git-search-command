@@ -11,9 +11,11 @@ from gsc.data.repository.gitlab_repository import (
 
 
 class GitLabSearchProjectUseCase(BaseUseCase):
-    def __init__(self) -> None:
-        self._project_repo = GitLabProjectRepository()
-        self._search_repo = GitLabSearchRepository()
+    def __init__(
+        self, project_repo: GitLabProjectRepository, search_repo: GitLabSearchRepository
+    ) -> None:
+        self._project_repo = project_repo
+        self._search_repo = search_repo
         self._on_searching = ReplaySubject()
 
     def on_searching(self) -> Observable:
@@ -35,9 +37,11 @@ class GitLabSearchProjectUseCase(BaseUseCase):
 
 
 class GitLabSearchGroupUseCase(BaseUseCase):
-    def __init__(self) -> None:
-        self._project_repo = GitLabProjectRepository()
-        self._search_repo = GitLabSearchRepository()
+    def __init__(
+        self, project_repo: GitLabProjectRepository, search_repo: GitLabSearchRepository
+    ) -> None:
+        self._project_repo = project_repo
+        self._search_repo = search_repo
         self._on_searching = ReplaySubject()
 
     def on_searching(self) -> Observable:

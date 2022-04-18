@@ -78,6 +78,7 @@ setup(
         "click>=8.0.3",
         "python-dotenv>=0.19.2",
         "jsonpickle>=2.1.0",
+        "dependency-injector>=4.0,<5.0",
     ],
     extras_require={
         "develop": ["black>=22.3.0", "pre-commit>=2.16.0", "pylint>=2.12.2"]

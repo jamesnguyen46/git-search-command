@@ -1,5 +1,7 @@
 import os.path
 import click
+from dependency_injector.wiring import Provide, inject
+from gsc.di.application_container import ApplicationContainer
 from gsc.utils import is_valid_environment_name
 from gsc.command_line import keep_main_thread_running
 from gsc.command_line.observer.gitlab_observer import (
@@ -9,8 +11,8 @@ from gsc.command_line.observer.gitlab_observer import (
 )
 from gsc.config import AppConfig, Env, EnvConfig, GitLabConfig
 from gsc.use_cases.gitlab_search_use_case import (
-    GitLabSearchProjectUseCase,
     GitLabSearchGroupUseCase,
+    GitLabSearchProjectUseCase,
 )
 
 
@@ -59,8 +61,11 @@ def gitlab_cli():
     help="List all environment.",
 )
 @click.pass_context
-def environment(ctx, **kwargs):
-    config = GitLabConfig()
+@inject
+def environment(
+    ctx, config: GitLabConfig = Provide[ApplicationContainer.gitlab.config], **kwargs
+):
+
     if kwargs.get("show_list"):
         __show_list_envs(config)
     elif kwargs.get("new"):
@@ -115,10 +120,15 @@ def environment(ctx, **kwargs):
     help="Enable debug logging of HTTP request.",
 )
 @click.pass_context
-def search(ctx, **kwargs):
-    config = GitLabConfig()
-    config.set_session_env("")
-    if not config.get_default_env():
+@inject
+def search(
+    ctx,
+    app_config: AppConfig = Provide[ApplicationContainer.gitlab.app_config],
+    gitlab_config: AppConfig = Provide[ApplicationContainer.gitlab.config],
+    **kwargs,
+):
+    gitlab_config.set_session_env("")
+    if not gitlab_config.get_default_env():
         click.secho("There is no environment.")
         click.secho("Try `gsc gl env --new <environment_name>` before searching.")
         return
@@ -137,16 +147,16 @@ def search(ctx, **kwargs):
             group=kwargs.get("group"),
             is_debug=kwargs.get("debug") or False,
         )
-        AppConfig().set_debug(param.is_debug)
+        app_config.set_debug(param.is_debug)
 
         session_env = kwargs.get("session_env")
         if session_env:
             param.env_name = session_env
-            config.set_session_env(session_env)
+            gitlab_config.set_session_env(session_env)
         else:
-            default_env = config.get_default_env()
+            default_env = gitlab_config.get_default_env()
             param.env_name = default_env.name
-            config.set_session_env(default_env.name)
+            gitlab_config.set_session_env(default_env.name)
 
         click.clear()
         if param.input_project:
@@ -162,9 +172,14 @@ def __is_validate_output_path(path: str):
 
 
 @keep_main_thread_running
-def __search_in_group(param: GitLabParam):
+@inject
+def __search_in_group(
+    param: GitLabParam,
+    usecase: GitLabSearchGroupUseCase = Provide[
+        ApplicationContainer.gitlab.search_group_use_case
+    ],
+):
     param.is_search_group = True
-    usecase = GitLabSearchGroupUseCase()
     usecase.on_searching().subscribe(GitLabPrintObserver(param=param))
     if param.output_path and not param.is_debug:
         usecase.on_searching().subscribe(GitLabExportObserver(param=param))
@@ -172,8 +187,13 @@ def __search_in_group(param: GitLabParam):
 
 
 @keep_main_thread_running
-def __search_in_project(param: GitLabParam):
-    usecase = GitLabSearchProjectUseCase()
+@inject
+def __search_in_project(
+    param: GitLabParam,
+    usecase: GitLabSearchProjectUseCase = Provide[
+        ApplicationContainer.gitlab.search_proj_use_case
+    ],
+):
     usecase.on_searching().subscribe(GitLabPrintObserver(param=param))
     if param.output_path and not param.is_debug:
         usecase.on_searching().subscribe(GitLabExportObserver(param=param))

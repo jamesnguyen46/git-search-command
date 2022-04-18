@@ -11,8 +11,7 @@ from gsc.data.response.gitlab_response import FileResponse, ProjectResponse
 
 
 class GitLabApi(Api):
-    def __init__(self) -> None:
-        config = GitLabConfig()
+    def __init__(self, config: GitLabConfig, app_config: AppConfig) -> None:
         selected_env = config.get_session_env()
         super().__init__(
             selected_env.host_name,
@@ -20,7 +19,7 @@ class GitLabApi(Api):
                 "Content-Type": "application/json;charset=UTF-8",
                 "PRIVATE-TOKEN": selected_env.private_token,
             },
-            AppConfig().is_debug(),
+            app_config.is_debug(),
         )
 
 

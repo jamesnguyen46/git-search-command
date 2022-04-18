@@ -7,9 +7,9 @@ from gsc.entities.gitlab_model import Project, File
 
 
 class GitLabProjectRepository(BaseRepository):
-    def __init__(self) -> None:
+    def __init__(self, project_request: ProjectRequest) -> None:
         super().__init__()
-        self._request = ProjectRequest()
+        self._request = project_request
 
     def project_info(self, project_id: int) -> Observable:
         return self._request.project_info(project_id).pipe(
@@ -31,9 +31,9 @@ class GitLabProjectRepository(BaseRepository):
 
 
 class GitLabSearchRepository(BaseRepository):
-    def __init__(self) -> None:
+    def __init__(self, search_request: SearchRequest) -> None:
         super().__init__()
-        self._request = SearchRequest()
+        self._request = search_request
 
     def search(self, project_id: int, keyword: str) -> Observable:
         return self._request.search_in_project(
