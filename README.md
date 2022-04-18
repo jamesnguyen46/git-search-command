@@ -144,15 +144,15 @@ Run `Build Project` task.
 
 - [OOP](https://en.wikipedia.org/wiki/Object-oriented_programming)
 - [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
-- Repository Pattern
 
 ### Library
 
-- [Python Request](<https://docs.python-requests.org/en/latest/>)
-- [ReactiveX for Python (RxPY)](https://rxpy.readthedocs.io/en/latest/#)
 - [Click](https://click.palletsprojects.com/)
 - [Python-dotenv](https://github.com/theskumar/python-dotenv)
+- [Python Request](<https://docs.python-requests.org/en/latest/>)
 - [JsonPickle](https://jsonpickle.github.io/)
+- [ReactiveX for Python (RxPY)](https://rxpy.readthedocs.io/en/latest/#)
+- [Dependency Injection](https://python-dependency-injector.ets-labs.org/index.html)
 
 ## License
 
