@@ -1,8 +1,11 @@
+from dataclasses import dataclass
 from gsc.entities.base_model import BaseModel
 
 
+@dataclass
 class ProjectResponse(BaseModel):
     def __init__(self, **kwargs):
+        super().__init__()
         # pylint: disable=C0103
         self.id = kwargs.get("id")
         self.name = kwargs.get("name")
@@ -10,8 +13,10 @@ class ProjectResponse(BaseModel):
         self.web_url = kwargs.get("web_url")
 
 
+@dataclass
 class FileResponse(BaseModel):
     def __init__(self, **kwargs):
+        super().__init__()
         self.name = kwargs.get("basename")
         self.path = kwargs.get("path")
         self.ref = kwargs.get("ref")

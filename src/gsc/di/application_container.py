@@ -5,7 +5,7 @@ from gsc.di.gitlab_container import GitLabContainer
 
 class ApplicationContainer(containers.DeclarativeContainer):
     # Config
-    config = providers.Singleton(AppConfig)
+    config = providers.ThreadSafeSingleton(AppConfig)
 
-    # Gitlab
-    gitlab = providers.Container(GitLabContainer, app_config=config)
+    # Gitlab module
+    gitlab_module = providers.Container(GitLabContainer, app_config=config)

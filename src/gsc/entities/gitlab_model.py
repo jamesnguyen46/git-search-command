@@ -1,22 +1,23 @@
+from dataclasses import dataclass
 from gsc.entities.base_model import BaseModel
 
 
+@dataclass(unsafe_hash=True)
 class Project(BaseModel):
-    def __init__(self):
-        # pylint: disable=C0103
-        self.id = None
-        self.name = None
-        self.archived = False
-        self.url = None
+    # pylint: disable=C0103
+    id: int
+    name: str
+    archived: bool
+    url: str
 
 
+@dataclass
 class File(BaseModel):
-    def __init__(self):
-        self.name = None
-        self.path = None
-        self.ref = None
-        self.project_url = None
-        self.data_preview = None
+    name: str
+    path: str
+    ref: str
+    data_preview: bool
+    project_url: str = ""
 
     @property
     def url(self):

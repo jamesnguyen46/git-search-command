@@ -6,6 +6,7 @@ from gsc.entities.base_model import BaseModel
 
 class Env(BaseModel):
     def __init__(self, **kwargs) -> None:
+        super().__init__()
         self.name = kwargs.get("name")
         self.host_name = kwargs.get("host_name")
         self.private_token = kwargs.get("private_token")
