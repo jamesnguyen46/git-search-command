@@ -2,6 +2,7 @@ from typing import Any
 from gsc.entities.gitlab_model import Project, File
 from gsc.observer.base_observer import BasePrintObserver, PrintParam
 from gsc.command_line import finish_main_thread
+from gsc.constants import GitLabConstant
 
 
 class GitLabParam(PrintParam):
@@ -15,11 +16,11 @@ class GitLabParam(PrintParam):
 
 class GitLabPrintObserver(BasePrintObserver):
     def __init__(self, param: GitLabParam = None) -> None:
-        self.repo_count = 0
+        self.project_count = 0
         super().__init__(param)
 
     def on_print_start(self) -> None:
-        msg = f'[GitLab] ("{self.param.env_name}" env) Searching for "{self.param.keyword}" ...'
+        msg = f'[{GitLabConstant.NAME}] ("{self.param.env_name}" env) Searching for "{self.param.keyword}" ...'
         self.print(msg)
         self.write(f"# {msg}")
 
@@ -30,7 +31,7 @@ class GitLabPrintObserver(BasePrintObserver):
         self.write_lines()
         if files:
             # Print project
-            self.repo_count += 1
+            self.project_count += 1
             project_msg = f"[{project.id}] {project.name} - {len(files)} file(s)"
             if project.archived:
                 project_msg = (
@@ -58,11 +59,11 @@ class GitLabPrintObserver(BasePrintObserver):
         self.print("------------------------")
         if self.param.is_search_group:
             self.write("---")
-            count_msg = self.repo_count if self.repo_count != 0 else "NO"
+            count_msg = self.project_count if self.project_count != 0 else "NO"
             msg = f'[{elapsed_time}] There are {count_msg} repository(s) containing "{self.param.keyword}".'
             self.print(msg)
             self.write(msg)
-        self.repo_count = 0
+        self.project_count = 0
 
     @finish_main_thread
     def on_print_error(self, error: Exception) -> None:

@@ -1,6 +1,7 @@
 import click
 from gsc._version import __version__
 from gsc.command_line.gitlab_cli import gitlab_cli
+from gsc.command_line.github_cli import github_cli
 
 CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
 
@@ -29,3 +30,4 @@ def app(ctx=None, show_version: bool = False):
 
 
 app.add_command(gitlab_cli)
+app.add_command(github_cli)

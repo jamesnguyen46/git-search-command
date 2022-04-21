@@ -4,7 +4,7 @@ from gsc.core.request_decorator import (
     get_request,
     get_request_pagination,
 )
-from gsc.constants import GitLabConstant
+from gsc.constants import GitLabConstant, APP_NAME
 from gsc.core.rx_task import rx_task
 from gsc.core.rate_limit import rate_limit
 from gsc.data.response.gitlab_response import FileResponse, ProjectResponse
@@ -16,6 +16,7 @@ class GitLabApi(Api):
         super().__init__(
             selected_env.host_name,
             {
+                "User-Agent": f"{APP_NAME}",
                 "Content-Type": "application/json;charset=UTF-8",
                 "PRIVATE-TOKEN": selected_env.private_token,
             },
