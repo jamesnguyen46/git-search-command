@@ -1,8 +1,9 @@
 import abc
 from timeit import default_timer as timer
 from datetime import timedelta
-from typing import Any, Optional
-from rx.core import typing, Observer
+from typing import Any
+from rx.core import Observer
+from gsc.observer.plugin import PrintPlugin, ExportPlugin
 
 
 class PrintParam(abc.ABC):
@@ -14,14 +15,11 @@ class PrintParam(abc.ABC):
 
 
 class BasePrintObserver(Observer, abc.ABC):
-    def __init__(
-        self,
-        on_next: Optional[typing.OnNext] = None,
-        on_error: Optional[typing.OnError] = None,
-        on_completed: Optional[typing.OnCompleted] = None,
-        param: PrintParam = None,
-    ) -> None:
-        super().__init__(on_next, on_error, on_completed)
+    def __init__(self, param: PrintParam = None) -> None:
+        super().__init__()
+        self.print_output = PrintPlugin(param.is_debug)
+        self.export_output = ExportPlugin()
+        self.export_output.set_output_path(param.output_path)
         self.param = param
         self.start_time = timer()
         self.on_print_start()
@@ -42,6 +40,15 @@ class BasePrintObserver(Observer, abc.ABC):
     def on_print_error(self, error: Exception) -> None:
         raise NotImplementedError
 
+    def write(self, message):
+        self.export_output.write(message)
+
+    def write_lines(self):
+        self.export_output.write_lines()
+
+    def print(self, msg, **styles):
+        self.print_output.print(msg, **styles)
+
     def on_next(self, value: Any) -> None:
         self.on_print_result(value)
 
@@ -54,4 +61,5 @@ class BasePrintObserver(Observer, abc.ABC):
 
     def dispose(self) -> None:
         self.param = None
+        self.close()
         return super().dispose()

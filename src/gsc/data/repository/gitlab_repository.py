@@ -22,12 +22,12 @@ class GitLabProjectRepository(BaseRepository):
         ).pipe(ops.map(self.__project_mapping))
 
     def __project_mapping(self, response: ProjectResponse) -> Project:
-        project = Project()
-        project.id = response.id
-        project.name = response.name
-        project.archived = response.archived
-        project.url = response.web_url
-        return project
+        return Project(
+            id=response.id,
+            name=response.name,
+            archived=response.archived,
+            url=response.web_url,
+        )
 
 
 class GitLabSearchRepository(BaseRepository):
@@ -44,9 +44,9 @@ class GitLabSearchRepository(BaseRepository):
         )
 
     def __file_mapping(self, response: FileResponse) -> File:
-        file = File()
-        file.name = response.name
-        file.path = response.path
-        file.ref = response.ref
-        file.data_preview = response.data_preview
-        return file
+        return File(
+            name=response.name,
+            path=response.path,
+            ref=response.ref,
+            data_preview=response.data_preview,
+        )

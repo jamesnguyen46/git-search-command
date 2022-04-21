@@ -1,4 +1,5 @@
 class GitLabConstant:
+    NAME = "GitLab"
     GROUP_API_LIMIT = 10
     SEARCH_API_LIMIT = 100
     SEARCH_RATE_LIMIT_CALLS = 60

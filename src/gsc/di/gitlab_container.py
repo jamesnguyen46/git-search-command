@@ -16,7 +16,7 @@ class GitLabContainer(containers.DeclarativeContainer):
     app_config = providers.Dependency()
 
     # Config
-    config = providers.Singleton(GitLabConfig)
+    config = providers.ThreadSafeSingleton(GitLabConfig)
 
     # Api request
     project_request = providers.Singleton(
