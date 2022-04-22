@@ -137,3 +137,7 @@ class EnvConfig(BaseConfig):
 
 class GitLabConfig(EnvConfig):
     pass
+
+
+class GitHubConfig(EnvConfig):
+    pass

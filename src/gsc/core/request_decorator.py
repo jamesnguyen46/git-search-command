@@ -80,7 +80,7 @@ class RequestDecorator(abc.ABC):
     ):
         req_header = self.headers
         if req_header is not None and headers is not None:
-            req_header = req_header.update(headers)
+            req_header.update(headers)
         elif headers is not None:
             req_header = headers
         else:
@@ -91,7 +91,7 @@ class RequestDecorator(abc.ABC):
                 total=3,
                 backoff_factor=10,
                 respect_retry_after_header=True,
-                status_forcelist=[429],
+                status_forcelist=[429, 403],
             )
             session = requests.Session()
             session.mount(self.__object.host, HTTPAdapter(max_retries=retries))

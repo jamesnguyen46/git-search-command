@@ -2,50 +2,43 @@ import os.path
 import click
 from dependency_injector.wiring import Provide, inject
 from gsc.di.application_container import ApplicationContainer
-from gsc.constants import GitLabConstant
+from gsc.constants import GitHubConstant
 from gsc.command_line.env_cli import environment
 from gsc.command_line import keep_main_thread_running
-from gsc.observer.gitlab_observer import (
-    GitLabParam,
-    GitLabPrintObserver,
+from gsc.observer.github_observer import (
+    GitHubParam,
+    GitHubPrintObserver,
 )
-from gsc.config import AppConfig, GitLabConfig
+from gsc.config import AppConfig, GitHubConfig
 from gsc.observer.plugin import ExportPlugin
-from gsc.use_cases.gitlab_search_use_case import (
-    GitLabSearchGroupUseCase,
-    GitLabSearchProjectUseCase,
+from gsc.use_cases.github_search_use_case import (
+    GitHubSearchRepoUseCase,
+    GitHubSearchMultiRepoUseCase,
 )
 
 
-@click.group("gl", help=f"Search in {GitLabConstant.NAME} repositories.")
+@click.group("gh", help=f"Search in {GitHubConstant.NAME} repositories.")
 @click.pass_context
 @inject
-def gitlab_cli(
-    ctx, config: GitLabConfig = Provide[ApplicationContainer.gitlab_module.config]
+def github_cli(
+    ctx, config: GitHubConfig = Provide[ApplicationContainer.github_module.config]
 ):
     ctx.obj = config
 
 
-gitlab_cli.add_command(environment)
+github_cli.add_command(environment)
 
 
-@gitlab_cli.command(
-    "search", help=f"Search the content in {GitLabConstant.NAME} repositories."
+@github_cli.command(
+    "search", help=f"Search the content in {GitHubConstant.NAME} repositories."
 )
 @click.argument("keyword", type=str, metavar="<keyword>")
 @click.option(
-    "-g",
-    "--group",
+    "-p",
+    "--repository",
     type=str,
     metavar="<string>",
-    help="Search in the specified project group, input group id or group path.",
-)
-@click.option(
-    "-p",
-    "--project",
-    type=int,
-    metavar="<int>",
-    help="Search in the specified project, input project id.",
+    help='Search in the specified project, input the full name of repository, example : "username/repository_name"',
 )
 @click.option(
     "-e",
@@ -75,11 +68,11 @@ gitlab_cli.add_command(environment)
 def search(
     ctx,
     app_config: AppConfig = Provide[ApplicationContainer.gitlab_module.app_config],
-    gitlab_config: GitLabConfig = Provide[ApplicationContainer.gitlab_module.config],
+    github_config: GitHubConfig = Provide[ApplicationContainer.github_module.config],
     **kwargs,
 ):
-    gitlab_config.set_session_env("")
-    if not gitlab_config.get_default_env():
+    github_config.set_session_env("")
+    if not github_config.get_default_env():
         click.secho("There is no environment.")
         click.secho("Try `gsc gl env --new <environment_name>` before searching.")
         return
@@ -91,11 +84,10 @@ def search(
             click.secho("Try 'gsc gl search -h' for help.")
             return
 
-        param = GitLabParam(
+        param = GitHubParam(
             keyword=kwargs.get("keyword"),
             output_path=output_path,
-            project_id=kwargs.get("project"),
-            group=kwargs.get("group"),
+            repo_name=kwargs.get("repository"),
             is_debug=kwargs.get("debug") or False,
         )
         app_config.set_debug(param.is_debug)
@@ -103,17 +95,17 @@ def search(
         session_env = kwargs.get("session_env")
         if session_env:
             param.env_name = session_env
-            gitlab_config.set_session_env(session_env)
+            github_config.set_session_env(session_env)
         else:
-            default_env = gitlab_config.get_default_env()
+            default_env = github_config.get_default_env()
             param.env_name = default_env.name
-            gitlab_config.set_session_env(default_env.name)
+            github_config.set_session_env(default_env.name)
 
         click.clear()
-        if param.input_project:
-            __search_in_project(param)
-        elif param.input_group:
-            __search_in_group(param)
+        if param.repo_name:
+            __search_in_single_repo(param)
+        else:
+            __search_in_multiple_repo(param)
     else:
         click.secho(search.get_help(ctx))
 
@@ -124,24 +116,23 @@ def __is_validate_output_path(path: str):
 
 @keep_main_thread_running
 @inject
-def __search_in_group(
-    param: GitLabParam,
-    usecase: GitLabSearchGroupUseCase = Provide[
-        ApplicationContainer.gitlab_module.search_group_use_case
+def __search_in_multiple_repo(
+    param: GitHubParam,
+    usecase: GitHubSearchMultiRepoUseCase = Provide[
+        ApplicationContainer.github_module.search_multi_repo_use_case
     ],
 ):
-    param.is_search_group = True
-    usecase.on_searching().subscribe(GitLabPrintObserver(param=param))
-    usecase.search(param.input_group, param.keyword)
+    usecase.on_searching().subscribe(GitHubPrintObserver(param=param))
+    usecase.search(param.keyword)
 
 
 @keep_main_thread_running
 @inject
-def __search_in_project(
-    param: GitLabParam,
-    usecase: GitLabSearchProjectUseCase = Provide[
-        ApplicationContainer.gitlab_module.search_proj_use_case
+def __search_in_single_repo(
+    param: GitHubParam,
+    usecase: GitHubSearchRepoUseCase = Provide[
+        ApplicationContainer.github_module.search_repo_use_case
     ],
 ):
-    usecase.on_searching().subscribe(GitLabPrintObserver(param=param))
-    usecase.search(param.input_project, param.keyword)
+    usecase.on_searching().subscribe(GitHubPrintObserver(param=param))
+    usecase.search(param.repo_name, param.keyword)
