@@ -23,7 +23,7 @@ class GitHubRepoRepository(BaseRepository):
         ).pipe(
             ops.map(self.__object_mapping),
             # Ignore fork repositories because search api cannot query them
-            ops.filter(lambda item: item.fork == False)
+            ops.filter(lambda item: item.fork is False),
         )
 
     def __object_mapping(self, response: RepositoryResponse) -> Repository:

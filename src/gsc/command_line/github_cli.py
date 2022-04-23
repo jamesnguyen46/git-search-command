@@ -30,7 +30,8 @@ github_cli.add_command(environment)
 
 
 @github_cli.command(
-    "search", help=f"Search the content in all {GitHubConstant.NAME} repositories that you owned."
+    "search",
+    help=f"Search the content in all {GitHubConstant.NAME} repositories that you owned.",
 )
 @click.argument("keyword", type=str, metavar="<keyword>")
 @click.option(
