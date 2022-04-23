@@ -6,12 +6,14 @@
 [![pre-commit](https://img.shields.io/github/workflow/status/nguyen-ngoc-thach/git-search-command/code-clean/master?label=pre-commit)](https://github.com/nguyen-ngoc-thach/git-search-command/actions/workflows/code_clean.yml)
 [![License](https://img.shields.io/badge/license-Apache-orange)](https://github.com/nguyen-ngoc-thach/git-search-command/blob/main/LICENSE)
 
-A simple tool to search the expression in the project scope for GitLab and GitHub repositories.
+A simple tool to search the expression in files for your GitLab and GitHub repositories.
+
+> Công cụ được viết dựa trên nhu cầu cá nhân của tôi.
 
 ## Prerequisites
 
 1. Install [Python3+](https://www.python.org/downloads/).
-2. Create a [personal GitLab access token](https://docs.gitlab.com/ee/user/project/settings/project_access_tokens.html) and store it in a secure place.
+2. Create a personal access token on [GitLab](https://docs.gitlab.com/ee/user/project/settings/project_access_tokens.html) or [GitHub](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token).
 
 ## Installation
 
@@ -20,7 +22,9 @@ python -m pip install --upgrade pip
 python -m pip install git-search-command
 ```
 
-## Environment
+## Usage
+
+### Environment
 
 After finishing the installation you need to create new environment for searching
 
@@ -32,144 +36,40 @@ Then input your host name and personal token as following
 
 ![](./resources/gsc_setup_env.gif)
 
-See more
-
-```
-gsc gl env --help
-
-Usage: gsc gl env [OPTIONS]
-
-  Setup the environment for searching, support multiple environments.
-
-Options:
-  -n, --new <environment>      Create new or override the env information if
-                               it was existed.
-  -d, --default <environment>  Set the environment as default.
-  -r, --remove <environment>   Remove the environment.
-  -i, --info <environment>     Display the environment info.
-  -l, --list                   List all environment.
-  -h, --help                   Show this message and exit.
-```
-
-## Usage
-
-### Search in project
-
-![](./resources/gsc_search_project.gif)
+### Search in GitLab
 
 ```
 gsc gl search <keywork> --project <project_id>
 ```
 
-You can find project ID as below image
-
-![](./resources/gsc_find_project_id.png)
-
-### Search in group
-
-![](./resources/gsc_search_group.gif)
+![](./resources/gsc_gl_search_project.gif)
 
 ```
 gsc gl search <keywork> --group <group_id_or_group_path>
 ```
 
-You can search in group using id or path name. You refer the below image to get them.
+![](./resources/gsc_gl_search_group.gif)
 
-![](./resources/gsc_find_group_id.png)
+### Search in GitHub
 
-See more
-
-```
-$ gsc gl search --help
-
-Usage: gsc gl search [OPTIONS] <keyword>
-
-  Search the content in GitLab repositories.
-
-Options:
-  -g, --group <string>        Search in the specified project group, input
-                              group id or group path.
-  -p, --project <int>         Search in the specified project, input project
-                              id.
-  -e, --environment <string>  Select the environment for searching, if not
-                              declare, default environment has been used.
-  -o, --output <file_path>    Export the search result to markdown file with
-                              extension .md or .markdown.
-  -d, --debug                 Enable debug logging of HTTP request.
-  -h, --help                  Show this message and exit.
-```
-
-## Development
-
-### Environments
-
-1. [Python 3.7+](https://www.python.org)
-2. [Visual Studio Code](https://code.visualstudio.com) with [Python](https://marketplace.visualstudio.com/items?itemName=ms-python.python) extension.
-
-### Setup
-
-#### Terminal
-
-Create and activate the virtual environment
+Default is to search all repositories that you owned, not fork repository.
 
 ```
-python -m venv .venv
-source .venv/bin/activate
+gsc gh search <keywork>
 ```
 
-Then install the dependencies for development environment
+![](./resources/gsc_gh_search_all.gif)
 
 ```
-python -m pip install -e .[develop]
+gsc gh search <keywork> --repository <repository_full_name>
 ```
 
-#### Vscode task
+![](./resources/gsc_gh_search_repo.gif)
 
-1. Open `View > Command Palette`, then select `Tasks: Run Task`
-2. Run `Install DEV environment` task
+### See more
 
-### Build
-
-#### Terminal
-
-```
-python setup.py -v build install
-```
-
-#### Vscode task
-
-Run `Build Project` task.
-
-### Design Concept
-
-- [OOP](https://en.wikipedia.org/wiki/Object-oriented_programming)
-- [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
-
-### Library
-
-- [Click](https://click.palletsprojects.com/)
-- [Python-dotenv](https://github.com/theskumar/python-dotenv)
-- [Python Request](<https://docs.python-requests.org/en/latest/>)
-- [JsonPickle](https://jsonpickle.github.io/)
-- [ReactiveX for Python (RxPY)](https://rxpy.readthedocs.io/en/latest/#)
-- [Dependency Injection](https://python-dependency-injector.ets-labs.org/index.html)
+Read the [wiki](https://github.com/nguyen-ngoc-thach/git-search-command/wiki) for the detail of `gsc` commands.
 
 ## License
 
 [Apache](https://github.com/nguyen-ngoc-thach/git-search-command/blob/main/LICENSE)
-
-## Reference documents
-
-### GitLab
-
-- [Project Api](https://docs.gitlab.com/ee/api/projects.html)
-- [Group Api](https://docs.gitlab.com/ee/api/groups.html)
-- [Search Api](https://docs.gitlab.com/ee/api/search.html)
-- [Search Rate Limit](https://docs.gitlab.com/ee/administration/instance_limits.html#search-rate-limit)
-
-### GitHub
-
-- [List Repositories API](https://docs.github.com/en/rest/repos/repos#list-repositories-for-the-authenticated-user)
-- [Repository API](https://docs.github.com/en/rest/repos/repos#list-repositories-for-the-authenticated-user)
-- [Search Code API](https://docs.github.com/en/rest/reference/search#search-code)
-- [Rate limit](https://docs.github.com/en/rest/overview/resources-in-the-rest-api#rate-limiting)
