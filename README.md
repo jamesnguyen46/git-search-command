@@ -8,8 +8,6 @@
 
 A simple tool to search the expression in files for your GitLab and GitHub repositories.
 
-> Công cụ được viết dựa trên nhu cầu cá nhân của tôi.
-
 ## Prerequisites
 
 1. Install [Python3+](https://www.python.org/downloads/).
