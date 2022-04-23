@@ -1,3 +1,4 @@
+from html import escape
 from gsc.config import AppConfig, GitHubConfig
 from gsc.core.request_decorator import (
     Api,
@@ -48,7 +49,7 @@ class SearchRequest(GitHubApi):
         response_model=ResultResponse,
     )
     def search_in_repo(self, repo_full_name: int, keyword: str, limit: int):
-        query = f"{keyword}+repo:{repo_full_name}"
+        query = escape(f"{keyword} in:file repo:{repo_full_name}")
         return None, {
             "q": query,
             "per_page": limit,

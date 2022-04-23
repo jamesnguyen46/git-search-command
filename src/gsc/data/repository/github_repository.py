@@ -20,7 +20,11 @@ class GitHubRepoRepository(BaseRepository):
     def get_repository_list(self) -> Observable:
         return self._request.get_repository_list(
             GitHubConstant.REPOSITORY_LIST_API_LIMIT
-        ).pipe(ops.map(self.__object_mapping))
+        ).pipe(
+            ops.map(self.__object_mapping),
+            # Ignore fork repositories because search api cannot query them
+            ops.filter(lambda item: item.fork == False)
+        )
 
     def __object_mapping(self, response: RepositoryResponse) -> Repository:
         return Repository(

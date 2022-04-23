@@ -30,7 +30,7 @@ github_cli.add_command(environment)
 
 
 @github_cli.command(
-    "search", help=f"Search the content in {GitHubConstant.NAME} repositories."
+    "search", help=f"Search the content in all {GitHubConstant.NAME} repositories that you owned."
 )
 @click.argument("keyword", type=str, metavar="<keyword>")
 @click.option(
@@ -38,7 +38,7 @@ github_cli.add_command(environment)
     "--repository",
     type=str,
     metavar="<string>",
-    help='Search in the specified project, input the full name of repository, example : "username/repository_name"',
+    help='Search in the specified repository, input the full name of repository, example : "username/repository_name"',
 )
 @click.option(
     "-e",
