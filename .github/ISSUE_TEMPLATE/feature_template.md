@@ -1,5 +1,5 @@
 ---
-name: "Feature"
+name: "Feature Request"
 about: "Open a feature issue to add new functionalities."
 title: "Add "
 labels: "type: feature"
