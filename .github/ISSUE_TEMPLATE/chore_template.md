@@ -1,6 +1,6 @@
 ---
 name: Chore
-about: "Open a Chore for minor update.
+about: "Open a Chore for minor update."
 title: 'Update'
 labels: 'type: chore'
 assignees: nguyen-ngoc-thach
