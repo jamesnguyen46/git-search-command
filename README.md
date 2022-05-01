@@ -1,10 +1,10 @@
 # GIT SEARCH COMMAND
 
 [![PyPI](https://img.shields.io/pypi/v/git-search-command)](https://pypi.org/project/git-search-command/)
-[![Last commit](https://img.shields.io/github/last-commit/nguyen-ngoc-thach/git-search-command?color=yellow)](https://github.com/nguyen-ngoc-thach/git-search-command/commits/)
+[![Last commit](https://img.shields.io/github/last-commit/jamesnguyen46/git-search-command?color=yellow)](https://github.com/jamesnguyen46/git-search-command/commits/)
 [![Code style](https://img.shields.io/badge/code%20style-black-black)](https://github.com/psf/black)
-[![pre-commit](https://img.shields.io/github/workflow/status/nguyen-ngoc-thach/git-search-command/code-clean/master?label=pre-commit)](https://github.com/nguyen-ngoc-thach/git-search-command/actions/workflows/code_clean.yml)
-[![License](https://img.shields.io/badge/license-Apache-orange)](https://github.com/nguyen-ngoc-thach/git-search-command/blob/main/LICENSE)
+[![pre-commit](https://img.shields.io/github/workflow/status/jamesnguyen46/git-search-command/code-clean/master?label=pre-commit)](https://github.com/jamesnguyen46/git-search-command/actions/workflows/code_clean.yml)
+[![License](https://img.shields.io/badge/license-Apache-orange)](https://github.com/jamesnguyen46/git-search-command/blob/main/LICENSE)
 
 A simple tool to search the expression in files for your GitLab and GitHub repositories.
 
@@ -66,8 +66,8 @@ gsc gh search <keywork> --repository <repository_full_name>
 
 ### See more
 
-Read the [wiki](https://github.com/nguyen-ngoc-thach/git-search-command/wiki) for the detail of `gsc` commands.
+Read the [wiki](https://github.com/jamesnguyen46/git-search-command/wiki) for the detail of `gsc` commands.
 
 ## License
 
-[Apache](https://github.com/nguyen-ngoc-thach/git-search-command/blob/main/LICENSE)
+[Apache](https://github.com/jamesnguyen46/git-search-command/blob/main/LICENSE)

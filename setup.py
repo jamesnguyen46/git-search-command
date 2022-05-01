@@ -50,8 +50,8 @@ setup(
     description="A simple tool to search the expression in the project scope for GitLab and GitHub repositories.",
     long_description=get_long_description(),
     long_description_content_type="text/markdown",
-    url="https://github.com/nguyen-ngoc-thach/git-search-command",
-    author="Nguyen Ngoc Thach",
+    url="https://github.com/jamesnguyen46/git-search-command",
+    author="James Nguyen",
     author_email="thachnguyen1989@gmail.com",
     # For a list of valid classifiers : https://pypi.org/classifiers/
     classifiers=[
@@ -85,8 +85,8 @@ setup(
     },
     entry_points={"console_scripts": ["gsc=gsc:main"]},
     project_urls={
-        "Bug Reports": "https://github.com/nguyen-ngoc-thach/git-search-command/issues",
-        "Source": "https://github.com/nguyen-ngoc-thach/git-search-command",
+        "Bug Reports": "https://github.com/jamesnguyen46/git-search-command/issues",
+        "Source": "https://github.com/jamesnguyen46/git-search-command",
     },
     cmdclass={"clean": CleanCommand},
 )
