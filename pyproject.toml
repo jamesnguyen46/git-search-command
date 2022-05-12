@@ -44,11 +44,6 @@ pre-commit = ">=2.16.0"
 [tool.poetry.scripts]
 gsc = 'gsc:main'
 
-[tool.poetry-dynamic-versioning]
-enable = true
-bump = true
-pattern = "default-unprefixed"
-
 [build-system]
-requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
+requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
