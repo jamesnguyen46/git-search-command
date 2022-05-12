@@ -84,6 +84,3 @@ jobs:
           poetry version "100.0.0-dev${{ env.NOW }}"
           poetry build
           poetry publish -r testpypi --username ${{ secrets.TEST_PYPI_USER_NAME }} --password ${{ secrets.TEST_PYPI_PASSWORD }}
-      - name: Test
-        run: |
-          pip install -i https://test.pypi.org/simple/ git-search-command==100.0.0-dev${{ env.NOW }}
