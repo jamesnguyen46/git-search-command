@@ -1,5 +1,5 @@
+from importlib import metadata
 import click
-from gsc._version import __version__
 from gsc.command_line.gitlab_cli import gitlab_cli
 from gsc.command_line.github_cli import github_cli
 
@@ -24,6 +24,7 @@ def app(ctx=None, show_version: bool = False):
         return
 
     if show_version:
+        __version__ = metadata.version("git-search-command")
         click.secho(__version__)
     else:
         click.secho(app.get_help(ctx))
