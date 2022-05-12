@@ -1,0 +1,82 @@
+name: Push & Pull Request
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9"]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        id: setup-python
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install and config Poetry
+        run: |
+          python -m pip install --upgrade pip poetry
+          poetry config virtualenvs.create true
+          poetry config virtualenvs.in-project true
+          poetry config installer.parallel true
+      - name: Load cached venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+      - name: Install dependencies
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        run: poetry install --no-root
+      - name: Load cached pre-commit
+        id: cached-pre-commit
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pre-commit
+          key: ${{ runner.os }}-pre-commit-${{ hashFiles('.pre-commit-config.yaml') }}
+      - name: Run pre-commit
+        run: |
+          source .venv/bin/activate
+          pre-commit run --verbose --all-files --show-diff-on-failure
+  build-and-upload-test-pypi:
+    name: Build and upload to Test PyPi
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9"]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        id: setup-python
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install and config Poetry
+        run: |
+          python -m pip install --upgrade pip poetry
+          poetry config virtualenvs.create true
+          poetry config virtualenvs.in-project true
+          poetry config installer.parallel true
+          poetry config repositories.testpypi ${{ secrets.TEST_PYPI_UPLOAD_URL }}
+      - name: Load cached venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+      - name: Install dependencies
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        run: poetry install --no-root --no-dev
+      - name: Build and upload to TestPypi
+        run: |
+          poetry version "$(git describe --tags --abbrev=0)-$GITHUB_HEAD_REF-SNAPSHOT"
+          poetry build
+          poetry publish -r testpypi --username ${{ secrets.TEST_PYPI_USER_NAME }} --password ${{ secrets.TEST_PYPI_PASSWORD }}
