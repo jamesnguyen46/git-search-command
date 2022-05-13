@@ -1,16 +1,3 @@
 {
-    // Virtual environment
-    "python.envFile": "${workspaceFolder}\\.venv",
-    // For testing
-    "python.testing.cwd": "${workspaceFolder}",
-    "python.testing.unittestArgs": [
-        "-v",
-        "-s",
-        "./tests",
-        "-p",
-        "test_*.py"
-    ],
-    "python.testing.pytestEnabled": false,
-    "python.testing.unittestEnabled": true,
     "python.terminal.activateEnvironment": true
 }
