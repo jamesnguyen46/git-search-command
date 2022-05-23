@@ -1,16 +1,15 @@
 # GIT SEARCH COMMAND
 
-[![PyPI](https://img.shields.io/pypi/v/git-search-command)](https://pypi.org/project/git-search-command/)
-[![Last commit](https://img.shields.io/github/last-commit/jamesnguyen46/git-search-command?color=yellow)](https://github.com/jamesnguyen46/git-search-command/commits/)
-[![Code style](https://img.shields.io/badge/code%20style-black-black)](https://github.com/psf/black)
-[![pre-commit](https://img.shields.io/github/workflow/status/jamesnguyen46/git-search-command/code-clean/master?label=pre-commit)](https://github.com/jamesnguyen46/git-search-command/actions/workflows/code_clean.yml)
-[![License](https://img.shields.io/badge/license-Apache-orange)](https://github.com/jamesnguyen46/git-search-command/blob/main/LICENSE)
+[![PyPI](https://img.shields.io/pypi/v/git-search-command?label=PyPi&logo=pypi&logoColor=white)](https://pypi.org/project/git-search-command/)
+[![License](https://img.shields.io/badge/license-Apache-orange?label=License&logo=apache&logoColor=white)](https://github.com/jamesnguyen46/git-search-command/blob/main/LICENSE)
+[![Last commit](https://img.shields.io/github/last-commit/jamesnguyen46/git-search-command?label=Last%20Commit&logo=github&logoColor=white&color=yellow)](https://github.com/jamesnguyen46/git-search-command/commits/)
+[![Push & Pull Request](https://github.com/jamesnguyen46/git-search-command/actions/workflows/push_pull_request.yml/badge.svg)](https://github.com/jamesnguyen46/git-search-command/actions/workflows/push_pull_request.yml)
 
 A simple tool to search the expression in files for your GitLab and GitHub repositories.
 
 ## Prerequisites
 
-1. Install [Python3+](https://www.python.org/downloads/).
+1. Install [Python3.7+](https://www.python.org/downloads/).
 2. Create a personal access token on [GitLab](https://docs.gitlab.com/ee/user/project/settings/project_access_tokens.html) or [GitHub](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token).
 
 ## Installation
