@@ -1,7 +1,12 @@
-from importlib import metadata
+import sys
 import click
 from gsc.command_line.gitlab_cli import gitlab_cli
 from gsc.command_line.github_cli import github_cli
+
+if sys.version_info[:2] >= (3, 8):
+    from importlib import metadata
+else:
+    import importlib_metadata as metadata
 
 CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
 
