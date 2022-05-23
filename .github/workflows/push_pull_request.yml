@@ -80,8 +80,7 @@ jobs:
       if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
       run: poetry install --no-root --no-dev
     - name: Build and upload to TestPypid
-      with:
-        python-version: 3.9
+      if: ${{ matrix.python-version == '3.9' }}
       run: |
         poetry version "100.0.0-dev${{ env.NOW }}"
         poetry build
