@@ -79,9 +79,11 @@ jobs:
     - name: Install dependencies
       if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
       run: poetry install --no-root --no-dev
-    - name: Build and upload to TestPypid
-      if: ${{ matrix.python-version == '3.9' }}
+    - name: Build
       run: |
         poetry version "100.0.0-dev${{ env.NOW }}"
         poetry build
+    - name: Upload to TestPypid
+      if: ${{ matrix.python-version == '3.9' }}
+      run: |
         poetry publish -r testpypi --username ${{ secrets.TEST_PYPI_USER_NAME }} --password ${{ secrets.TEST_PYPI_PASSWORD }}
