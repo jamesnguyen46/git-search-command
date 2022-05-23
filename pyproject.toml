@@ -29,7 +29,7 @@ classifiers = [
 "Bug Reports" = "https://github.com/jamesnguyen46/git-search-command/issues"
 
 [tool.poetry.dependencies]
-python = ">=3.7"
+python = ">=3.7,<4"
 requests = ">=2.26.0"
 rx = ">=3.2.0"
 click = ">=8.0.3"
