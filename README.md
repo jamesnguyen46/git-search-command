@@ -9,7 +9,7 @@ A simple tool to search the expression in files for your GitLab and GitHub repos
 
 ## Prerequisites
 
-1. Install [Python3.9+](https://www.python.org/downloads/).
+1. Install [Python3.7+](https://www.python.org/downloads/).
 2. Create a personal access token on [GitLab](https://docs.gitlab.com/ee/user/project/settings/project_access_tokens.html) or [GitHub](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token).
 
 ## Installation

@@ -12,11 +12,15 @@ packages = [
 license = "Apache-2.0"
 readme = "README.md"
 keywords = ["gitlab", "search", "command line", "python", "git", "github"]
+# For a list of valid classifiers : https://pypi.org/classifiers/
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
     "Topic :: Internet :: WWW/HTTP :: Indexing/Search",
     "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10"
 ]
@@ -25,7 +29,7 @@ classifiers = [
 "Bug Reports" = "https://github.com/jamesnguyen46/git-search-command/issues"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = ">=3.7"
 requests = ">=2.26.0"
 rx = ">=3.2.0"
 click = ">=8.0.3"
