@@ -1,14 +1,32 @@
-import sys
+import os
 import click
+import toml
+from tabulate import tabulate
+from gsc import utils
 from gsc.command_line.gitlab_cli import gitlab_cli
 from gsc.command_line.github_cli import github_cli
 
-if sys.version_info[:2] >= (3, 8):
-    from importlib import metadata
-else:
-    import importlib_metadata as metadata
-
 CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
+
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+
+# pylint: disable=W0613
+def print_app_info(ctx, param, value):
+    if not value:
+        return False
+
+    info = toml.load(utils.get_pyproject_path())["tool"]["poetry"]
+    table = [
+        ["Name", "GSC - Git Search Command"],
+        ["Description", info["description"]],
+        ["Author", info["authors"][0]],
+        ["Source", info["repository"]],
+        ["Version", utils.get_app_version()],
+        ["License", info["license"]],
+    ]
+    click.echo(tabulate(table, tablefmt="fancy_grid"))
+    return True
 
 
 @click.group(
@@ -17,21 +35,20 @@ CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
     help="A simple tool to search the expression in the project scope for GitLab and GitHub repositories.",
 )
 @click.option(
-    "-v",
-    "--version",
-    "show_version",
+    "-i",
+    "--info",
+    "information",
     is_flag=True,
-    help="Show the current gsc version.",
+    default=False,
+    callback=print_app_info,
+    help="Show the information of gsc.",
 )
 @click.pass_context
-def app(ctx=None, show_version: bool = False):
+def app(ctx: click.Context = None, information=False):
     if ctx.invoked_subcommand is not None:
         return
 
-    if show_version:
-        __version__ = metadata.version("git-search-command")
-        click.secho(__version__)
-    else:
+    if not information:
         click.secho(app.get_help(ctx))
 
 
