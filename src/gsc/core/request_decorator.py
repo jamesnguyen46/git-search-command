@@ -23,7 +23,7 @@ class HttpMethod(Enum):
 
 
 class RequestDecorator(abc.ABC):
-    # pylint: disable = R0913
+    # pylint: disable=R0913
     def __init__(
         self,
         method: HttpMethod,
