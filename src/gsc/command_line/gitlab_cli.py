@@ -76,7 +76,7 @@ gitlab_cli.add_command(environment)
     "ignore_no_result",
     is_flag=True,
     default=False,
-    help="Do not show the project which has no result (search group).",
+    help="Do not show the project which has no result (for searching group).",
 )
 @click.option(
     "--show-code-preview",
