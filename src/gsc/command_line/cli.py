@@ -1,6 +1,5 @@
 import os
 import click
-import toml
 from tabulate import tabulate
 from gsc import utils
 from gsc.command_line.gitlab_cli import gitlab_cli
@@ -16,14 +15,16 @@ def print_app_info(ctx, param, value):
     if not value:
         return False
 
-    info = toml.load(utils.get_pyproject_path())["tool"]["poetry"]
     table = [
-        ["Name", "GSC - Git Search Command"],
-        ["Description", info["description"]],
-        ["Author", info["authors"][0]],
-        ["Source", info["repository"]],
-        ["Version", utils.get_app_version()],
-        ["License", info["license"]],
+        ["Name", f"GSC - {utils.get_project_name().title().replace('-', ' ')}"],
+        ["Description", utils.get_project_summary()],
+        [
+            "Author",
+            f"{utils.get_project_author()} <{utils.get_project_author_email()}>",
+        ],
+        ["Source", utils.get_project_home_page()],
+        ["Version", utils.get_project_version()],
+        ["License", utils.get_project_license()],
     ]
     click.echo(tabulate(table, tablefmt="fancy_grid"))
     return True
