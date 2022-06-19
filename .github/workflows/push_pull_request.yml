@@ -83,7 +83,7 @@ jobs:
       run: |
         poetry version "100.0.0-dev${{ env.NOW }}"
         poetry build
-    - name: Upload to TestPypid
+    - name: Upload to TestPypi
       if: ${{ matrix.python-version == '3.9' }}
       run: |
         poetry publish -r testpypi --username ${{ secrets.TEST_PYPI_USER_NAME }} --password ${{ secrets.TEST_PYPI_PASSWORD }}

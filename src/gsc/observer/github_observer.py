@@ -1,5 +1,5 @@
 from typing import Any
-from gsc.entities.github_model import Repository, File
+from gsc.entities.github_model import Repository
 from gsc.observer.base_observer import BasePrintObserver, PrintParam
 from gsc.command_line import finish_main_thread
 from gsc.constants import GitHubConstant
@@ -23,11 +23,11 @@ class GitHubPrintObserver(BasePrintObserver):
 
     def on_print_result(self, value: Any) -> None:
         repo: Repository = value[0]
-        files: File = value[1]
+        files: list = value[1]
         self.print("------------------------")
         self.write_lines()
         if files:
-            # Print repository
+            # REPOSITORY
             self.repo_count += 1
             repo_msg = f"[{repo.id}] {repo.name} - {len(files)} file(s)"
             if repo.archived:
@@ -35,17 +35,17 @@ class GitHubPrintObserver(BasePrintObserver):
             self.print(repo_msg, fg="bright_magenta")
             self.write(f"## [{repo_msg}]({repo.html_url})")
             self.write_lines()
-            # Print files
+            # FILES
             for file in files:
                 self.print(f"{file.path}")
                 self.write(f"- [{file.path}]({file.html_url})")
         else:
-            # Print repository
+            # REPOSITORY
             repo_msg = f"[{repo.id}] {repo.name}"
             self.print(repo_msg, fg="bright_magenta", dim=True)
             self.write(f"## [{repo_msg}]({repo.html_url})")
             self.write_lines()
-            # Print files
+            # FILES
             self.print("No results found", dim=True)
             self.write("No results found")
 
