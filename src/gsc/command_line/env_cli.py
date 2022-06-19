@@ -40,14 +40,14 @@ from gsc.utils import is_valid_environment_name
     "show_list",
     is_flag=True,
     default=False,
-    help="List all environment.",
+    help="List all environments.",
 )
 @click.pass_context
 def environment(
     ctx,
     **kwargs,
 ):
-    config = ctx.obj
+    config = ctx.obj[1]
     if kwargs.get("show_list"):
         __show_list_envs(config)
     elif kwargs.get("new"):
