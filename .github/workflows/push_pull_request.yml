@@ -121,8 +121,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install from TestPypi
       run: |
-        python -m pip install --upgrade pip
-        python -m pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple git-search-command=="${{ env.VERSION }}"
+        python -m pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple --upgrade pip git-search-command=="${{ env.VERSION }}"
     - name: Test command
       run: |
         gsc -i
