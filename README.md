@@ -5,7 +5,9 @@
 [![Last commit](https://img.shields.io/github/last-commit/jamesnguyen46/git-search-command?label=Last%20Commit&logo=github&logoColor=white&color=yellow)](https://github.com/jamesnguyen46/git-search-command/commits/)
 [![Push & Pull Request](https://github.com/jamesnguyen46/git-search-command/actions/workflows/push_pull_request.yml/badge.svg)](https://github.com/jamesnguyen46/git-search-command/actions/workflows/push_pull_request.yml)
 
-A simple tool to search the expression in files for your GitLab and GitHub repositories.
+A simple tool to search the content in files for your GitLab and GitHub repositories.
+
+> This project has been implemented for PERSONAL USE. If you want more advanced features like creating issue, pull request ... may be refer to use [GLab](https://github.com/profclems/glab) or [GitHub CLI](https://github.com/cli/cli)
 
 ## Prerequisites
 

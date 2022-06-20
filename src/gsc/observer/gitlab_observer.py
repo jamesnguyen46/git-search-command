@@ -1,5 +1,5 @@
 from typing import Any
-from gsc.entities.gitlab_model import Project, File
+from gsc.entities.gitlab_model import Project
 from gsc.observer.base_observer import BasePrintObserver, PrintParam
 from gsc.command_line import finish_main_thread
 from gsc.constants import GitLabConstant
@@ -8,10 +8,11 @@ from gsc.constants import GitLabConstant
 class GitLabParam(PrintParam):
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
-        self.show_preview = kwargs.get("show_preview")
         self.input_project = kwargs.get("project_id")
         self.input_group = kwargs.get("group")
         self.is_search_group = kwargs.get("is_search_group") or False
+        self.code_preview = kwargs.get("code_preview") or False
+        self.ignore_no_result = kwargs.get("ignore_no_result") or False
 
 
 class GitLabPrintObserver(BasePrintObserver):
@@ -26,11 +27,11 @@ class GitLabPrintObserver(BasePrintObserver):
 
     def on_print_result(self, value: Any) -> None:
         project: Project = value[0]
-        files: File = value[1]
-        self.print("------------------------")
-        self.write_lines()
+        files: list = value[1]
         if files:
-            # Print project
+            # PROJECT
+            self.print("------------------------")
+            self.write_lines()
             self.project_count += 1
             project_msg = f"[{project.id}] {project.name} - {len(files)} file(s)"
             if project.archived:
@@ -40,17 +41,27 @@ class GitLabPrintObserver(BasePrintObserver):
             self.print(project_msg, fg="bright_magenta")
             self.write(f"## [{project_msg}]({project.url})")
             self.write_lines()
-            # Print files
+            # FILE
             for file in files:
+                # File path
                 self.print(f"{file.path}")
                 self.write(f"- [{file.path}]({file.url})")
+                # Show code preview if needed
+                if self.param.code_preview:
+                    self.print(file.data_preview, dim=True)
+                    self.write(f"```\n{file.data_preview})\n```")
         else:
-            # Print project
+            if self.param.is_search_group and self.param.ignore_no_result:
+                return
+
+            self.print("------------------------")
+            self.write_lines()
+            # PROJECT
             project_msg = f"[{project.id}] {project.name}"
             self.print(project_msg, fg="bright_magenta", dim=True)
             self.write(f"## [{project_msg}]({project.url})")
             self.write_lines()
-            # Print files
+            # FILE
             self.print("No results found", dim=True)
             self.write("No results found")
 

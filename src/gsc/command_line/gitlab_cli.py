@@ -1,6 +1,6 @@
-import os.path
 import click
 from dependency_injector.wiring import Provide, inject
+from gsc import utils
 from gsc.di.application_container import ApplicationContainer
 from gsc.constants import GitLabConstant
 from gsc.command_line.env_cli import environment
@@ -10,7 +10,6 @@ from gsc.observer.gitlab_observer import (
     GitLabPrintObserver,
 )
 from gsc.config import AppConfig, GitLabConfig
-from gsc.observer.plugin import ExportPlugin
 from gsc.use_cases.gitlab_search_use_case import (
     GitLabSearchGroupUseCase,
     GitLabSearchProjectUseCase,
@@ -21,9 +20,11 @@ from gsc.use_cases.gitlab_search_use_case import (
 @click.pass_context
 @inject
 def gitlab_cli(
-    ctx, config: GitLabConfig = Provide[ApplicationContainer.gitlab_module.config]
+    ctx,
+    app_config: AppConfig = Provide[ApplicationContainer.gitlab_module.app_config],
+    config: GitLabConfig = Provide[ApplicationContainer.gitlab_module.config],
 ):
-    ctx.obj = config
+    ctx.obj = [app_config, config]
 
 
 gitlab_cli.add_command(environment)
@@ -70,14 +71,25 @@ gitlab_cli.add_command(environment)
     default=False,
     help="Enable debug logging of HTTP request.",
 )
+@click.option(
+    "--code-preview",
+    "code_preview",
+    is_flag=True,
+    default=False,
+    help="Show code preview.",
+)
+@click.option(
+    "--ignore-no-result",
+    "ignore_no_result",
+    is_flag=True,
+    default=False,
+    help="Do not show the project which has no result (for searching group).",
+)
 @click.pass_context
 @inject
-def search(
-    ctx,
-    app_config: AppConfig = Provide[ApplicationContainer.gitlab_module.app_config],
-    gitlab_config: GitLabConfig = Provide[ApplicationContainer.gitlab_module.config],
-    **kwargs,
-):
+def search(ctx, **kwargs):
+    app_config = ctx.obj[0]
+    gitlab_config = ctx.obj[1]
     gitlab_config.set_session_env("")
     if not gitlab_config.get_default_env():
         click.secho("There is no environment.")
@@ -86,7 +98,7 @@ def search(
 
     if kwargs.get("keyword"):
         output_path = kwargs.get("output")
-        if output_path and not __is_validate_output_path(output_path):
+        if output_path and not utils.is_supported_extension_output_file(output_path):
             click.secho("Error: Output file type is not supported.")
             click.secho("Try 'gsc gl search -h' for help.")
             return
@@ -96,7 +108,9 @@ def search(
             output_path=output_path,
             project_id=kwargs.get("project"),
             group=kwargs.get("group"),
-            is_debug=kwargs.get("debug") or False,
+            is_debug=kwargs.get("debug"),
+            code_preview=kwargs.get("code_preview"),
+            ignore_no_result=kwargs.get("ignore_no_result"),
         )
         app_config.set_debug(param.is_debug)
 
@@ -116,10 +130,6 @@ def search(
             __search_in_group(param)
     else:
         click.secho(search.get_help(ctx))
-
-
-def __is_validate_output_path(path: str):
-    return os.path.splitext(path)[1] in ExportPlugin.EXTENSION_SUPPORTED
 
 
 @keep_main_thread_running

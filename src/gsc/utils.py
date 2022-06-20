@@ -9,6 +9,7 @@ else:
     import importlib_metadata as metadata
 
 DISTRIBUTION_NAME = "git-search-command"
+EXTENSION_SUPPORTED = (".md", ".markdown")
 
 
 def get_project_name():
@@ -47,6 +48,10 @@ def is_valid_environment_name(name: str):
 def get_pyproject_path():
     root_path = Path(__file__).parent.parent.parent
     return os.path.join(root_path, "pyproject.toml")
+
+
+def is_supported_extension_output_file(output_path: str):
+    return os.path.splitext(output_path)[1] in EXTENSION_SUPPORTED
 
 
 def __get_project_metadata():

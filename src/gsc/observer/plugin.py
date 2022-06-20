@@ -1,10 +1,7 @@
-import os
 import click
 
 
 class ExportPlugin:
-    EXTENSION_SUPPORTED = (".md", ".markdown")
-
     def __init__(self) -> None:
         self._export_file = None
 
@@ -12,9 +9,6 @@ class ExportPlugin:
         if output_path is None:
             self._export_file = None
             return
-
-        if os.path.splitext(output_path)[1] not in self.EXTENSION_SUPPORTED:
-            raise NotImplementedError("Only support markdown file.")
 
         self._export_file = (
             click.open_file(output_path, mode="w") if output_path else None
