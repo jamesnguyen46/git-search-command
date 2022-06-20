@@ -8,10 +8,10 @@ from gsc.constants import GitLabConstant
 class GitLabParam(PrintParam):
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
-        self.show_code_preview = kwargs.get("show_code_preview") or False
         self.input_project = kwargs.get("project_id")
         self.input_group = kwargs.get("group")
         self.is_search_group = kwargs.get("is_search_group") or False
+        self.code_preview = kwargs.get("code_preview") or False
         self.ignore_no_result = kwargs.get("ignore_no_result") or False
 
 
@@ -47,7 +47,7 @@ class GitLabPrintObserver(BasePrintObserver):
                 self.print(f"{file.path}")
                 self.write(f"- [{file.path}]({file.url})")
                 # Show code preview if needed
-                if self.param.show_code_preview:
+                if self.param.code_preview:
                     self.print(file.data_preview, dim=True)
                     self.write(f"```\n{file.data_preview})\n```")
         else:

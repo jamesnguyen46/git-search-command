@@ -72,18 +72,18 @@ gitlab_cli.add_command(environment)
     help="Enable debug logging of HTTP request.",
 )
 @click.option(
+    "--code-preview",
+    "code_preview",
+    is_flag=True,
+    default=False,
+    help="Show code preview.",
+)
+@click.option(
     "--ignore-no-result",
     "ignore_no_result",
     is_flag=True,
     default=False,
     help="Do not show the project which has no result (for searching group).",
-)
-@click.option(
-    "--show-code-preview",
-    "show_code_preview",
-    is_flag=True,
-    default=False,
-    help="Show code preview.",
 )
 @click.pass_context
 @inject
@@ -105,11 +105,11 @@ def search(ctx, **kwargs):
 
         param = GitLabParam(
             keyword=kwargs.get("keyword"),
-            show_code_preview=kwargs.get("show_code_preview"),
             output_path=output_path,
             project_id=kwargs.get("project"),
             group=kwargs.get("group"),
-            is_debug=kwargs.get("debug") or False,
+            is_debug=kwargs.get("debug"),
+            code_preview=kwargs.get("code_preview"),
             ignore_no_result=kwargs.get("ignore_no_result"),
         )
         app_config.set_debug(param.is_debug)
