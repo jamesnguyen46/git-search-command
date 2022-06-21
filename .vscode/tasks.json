@@ -91,6 +91,22 @@
                 },
                 "problemMatcher": []
             }
+        },
+        {
+            "label": "5. Unit test",
+            "type": "shell",
+            "command": "source .venv/bin/activate && pytest tests",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [],
+            "windows": {
+                "command": ".\\.venv\\Scripts\\Activate.ps1 ; pytest tests",
+                "options": {
+                    "cwd": "${workspaceFolder}"
+                },
+                "problemMatcher": []
+            }
         }
     ]
 }

@@ -1,4 +1,3 @@
-from pathlib import Path
 import os
 import sys
 import re
@@ -42,16 +41,14 @@ def get_project_license():
 
 
 def is_valid_environment_name(name: str):
-    return re.match("^[A-Za-z0-9_-]*$", name)
-
-
-def get_pyproject_path():
-    root_path = Path(__file__).parent.parent.parent
-    return os.path.join(root_path, "pyproject.toml")
+    return re.match(r"^[^_-][\w\d_-][^\s\.]*[^_-]$", name)
 
 
 def is_supported_extension_output_file(output_path: str):
-    return os.path.splitext(output_path)[1] in EXTENSION_SUPPORTED
+    try:
+        return os.path.splitext(output_path)[1] in EXTENSION_SUPPORTED
+    except Exception as _:
+        return False
 
 
 def __get_project_metadata():
