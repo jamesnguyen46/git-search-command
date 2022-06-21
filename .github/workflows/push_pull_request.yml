@@ -9,7 +9,8 @@ on:
     - main
 
 jobs:
-  pre-commit:
+  check-code-convention-and-run-unit-test:
+    name: Check code convention and run unit test
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -46,10 +47,16 @@ jobs:
       run: |
         source .venv/bin/activate
         pre-commit run --verbose --all-files --show-diff-on-failure
+    - name: Run unit test
+      run: |
+        source .venv/bin/activate
+        poetry build
+        poetry install
+        python -m pytest tests
   build-and-upload-test-pypi:
     name: Build and upload to Test PyPi
     runs-on: ubuntu-latest
-    needs: [pre-commit]
+    needs: [check-code-convention-and-run-unit-test]
     strategy:
       matrix:
         python-version: ['3.7', '3.8', '3.9', '3.10']
