@@ -78,8 +78,10 @@ def __show_list_envs(config: EnvConfig):
 
 def __create_new_environment(config: EnvConfig, name: str):
     if not is_valid_environment_name(name):
+        click.secho("Environment name is invalid.", fg="bright_red")
         click.secho(
-            "Environment name only contains letters, numbers, underscores, dashes..., not space"
+            "Environment name only contains letters, numbers, underscores, dashes...",
+            fg="bright_red",
         )
         return
 
