@@ -62,7 +62,11 @@ jobs:
         source .venv/bin/activate
         poetry build
         poetry install
-        python -m pytest tests
+        coverage run -m pytest tests
+    - name: Upload coverage report to coveralls.io
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.GHA_TOKEN }}
   build-and-publish-pypi:
     name: Publish to PyPi
     runs-on: ubuntu-latest
