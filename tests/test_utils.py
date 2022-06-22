@@ -14,7 +14,7 @@ MOCK_VERSION = "2.2.2"
 
 
 @pytest.fixture
-def setup_mock_metadata(mocker):
+def setup_metadata(mocker):
     if sys.version_info[:2] >= (3, 8):
         mocker.patch("importlib.metadata.metadata", return_value=mock_data)
     else:
@@ -22,44 +22,44 @@ def setup_mock_metadata(mocker):
 
 
 @pytest.fixture
-def setup_mock_version(mocker):
+def setup_version(mocker):
     if sys.version_info[:2] >= (3, 8):
         mocker.patch("importlib.metadata.version", return_value=MOCK_VERSION)
     else:
         mocker.patch("importlib_metadata.version", return_value=MOCK_VERSION)
 
 
-@pytest.mark.usefixtures("setup_mock_metadata")
+@pytest.mark.usefixtures("setup_metadata")
 def test_get_project_name():
     assert mock_data["Name"] in utils.get_project_name()
 
 
-@pytest.mark.usefixtures("setup_mock_metadata")
+@pytest.mark.usefixtures("setup_metadata")
 def test_get_project_summary():
     assert mock_data["Summary"] in utils.get_project_summary()
 
 
-@pytest.mark.usefixtures("setup_mock_metadata")
+@pytest.mark.usefixtures("setup_metadata")
 def test_get_project_author():
     assert mock_data["Author"] in utils.get_project_author()
 
 
-@pytest.mark.usefixtures("setup_mock_metadata")
+@pytest.mark.usefixtures("setup_metadata")
 def test_get_project_author_email():
     assert mock_data["Author-email"] in utils.get_project_author_email()
 
 
-@pytest.mark.usefixtures("setup_mock_metadata")
+@pytest.mark.usefixtures("setup_metadata")
 def test_get_project_home_page():
     assert mock_data["Home-page"] in utils.get_project_home_page()
 
 
-@pytest.mark.usefixtures("setup_mock_version")
+@pytest.mark.usefixtures("setup_version")
 def test_get_project_version():
     assert MOCK_VERSION in utils.get_project_version()
 
 
-@pytest.mark.usefixtures("setup_mock_metadata")
+@pytest.mark.usefixtures("setup_metadata")
 def test_get_project_license():
     assert mock_data["License"] in utils.get_project_license()
 
@@ -102,3 +102,4 @@ def test_is_supported_extension_output_file():
     assert not utils.is_supported_extension_output_file("C:\\Desktop\\output.html")
     assert not utils.is_supported_extension_output_file(".markdown")
     assert not utils.is_supported_extension_output_file("abcxyz")
+    assert not utils.is_supported_extension_output_file(123456)

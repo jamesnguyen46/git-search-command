@@ -1,5 +1,3 @@
-from gsc import config
-
 # Test BaseConfig
 
 # Test AppConfig
