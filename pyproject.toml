@@ -42,9 +42,17 @@ tabulate = "^0.8.9"
 pre-commit = ">=2.16.0"
 pytest = "^7.1.2"
 pytest-mock = "^3.7.0"
+coverage = "^6.4.1"
 
 [tool.poetry.scripts]
 gsc = 'gsc:main'
+
+[tool.coverage.run]
+branch = true
+source = ["src"]
+
+[tool.coverage.report]
+show_missing = true
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
