@@ -1,14 +1,15 @@
 # GIT SEARCH COMMAND
 
 [![PyPI](https://img.shields.io/pypi/v/git-search-command?label=PyPi&logo=pypi&logoColor=white)](https://pypi.org/project/git-search-command/)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/git-search-command?label=Downloads&logo=pypi&logoColor=white&color=ff69b4)](https://pypi.org/project/git-search-command/)
 [![Last commit](https://img.shields.io/github/last-commit/jamesnguyen46/git-search-command?label=Last%20Commit&logo=github&logoColor=white&color=yellow)](https://github.com/jamesnguyen46/git-search-command/commits/)
-[![Coverage](https://img.shields.io/codecov/c/github/jamesnguyen46/git-search-command?token=HO0BAT95VI&label=Coverage&logo=codecov&logoColor=white)](https://codecov.io/gh/jamesnguyen46/git-search-command)
+[![Coverage](https://img.shields.io/codecov/c/github/jamesnguyen46/git-search-command?token=HO0BAT95VI&label=Coverage&logo=codecov&logoColor=white&color=blueviolet)](https://codecov.io/gh/jamesnguyen46/git-search-command)
 [![Github Action](https://img.shields.io/github/workflow/status/jamesnguyen46/git-search-command/Push%20&%20Pull%20Request?label=CI&logo=github-actions&logoColor=white)](https://github.com/jamesnguyen46/git-search-command/actions/workflows/push_pull_request.yml)
 [![License](https://img.shields.io/badge/license-Apache-orange?label=License&logo=apache&logoColor=white)](https://github.com/jamesnguyen46/git-search-command/blob/main/LICENSE)
 
 A simple tool to search the content in files for your GitLab and GitHub repositories.
 
-> This project has been implemented for PERSONAL USE. If you want more advanced features like creating issue, pull request ... may be refer to use [GLab](https://github.com/profclems/glab) or [GitHub CLI](https://github.com/cli/cli)
+> This project has been implemented for PERSONAL USE. If you want more advanced features like creating issue, pull request ... may be refer to use [GLab](https://github.com/profclems/glab) or [GitHub CLI](https://github.com/cli/cli).
 
 ## Prerequisites
 
