@@ -35,6 +35,7 @@ class ProjectRequest(GitLabApi):
             "per_page": limit,
             "order_by": "id",
             "sort": "asc",
+            "include_subgroups": "true",
         }
 
     @rx_task
