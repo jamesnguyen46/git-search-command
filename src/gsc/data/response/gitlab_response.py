@@ -8,7 +8,7 @@ class ProjectResponse(BaseModel):
         super().__init__()
         # pylint: disable=C0103
         self.id = kwargs.get("id")
-        self.name = kwargs.get("name")
+        self.name = kwargs.get("name_with_namespace")
         self.archived = kwargs.get("archived")
         self.web_url = kwargs.get("web_url")
 
