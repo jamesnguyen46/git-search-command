@@ -5,7 +5,7 @@ from gsc.data.repository.gitlab_repository import (
     GitLabProjectRepository,
     GitLabSearchRepository,
 )
-from gsc.use_cases.gitlab_search_use_case import (
+from gsc.domain.use_cases.gitlab_search_use_case import (
     GitLabSearchProjectUseCase,
     GitLabSearchGroupUseCase,
 )

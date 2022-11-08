@@ -1,4 +1,4 @@
-from gsc.command_line import cli
+from gsc.presentation.command_line import cli
 from gsc.di.application_container import ApplicationContainer
 
 

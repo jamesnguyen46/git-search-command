@@ -1,8 +1,8 @@
 from rx.core import Observable
 from rx.subject import ReplaySubject
 from rx import combine_latest, just, operators as ops
-from gsc.entities.gitlab_model import Project
-from gsc.use_cases.base_use_case import BaseUseCase
+from gsc.domain.entities.gitlab_model import Project
+from gsc.domain.use_cases.base_use_case import BaseUseCase
 from gsc.core.rx_task import rx_pool_scheduler
 from gsc.data.repository.gitlab_repository import (
     GitLabProjectRepository,

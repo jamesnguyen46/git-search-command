@@ -8,7 +8,7 @@
 
 A simple tool to search the content in files for your GitLab and GitHub repositories.
 
-> This project has been implemented for PERSONAL USE. If you want more advanced features like creating issue, pull request ... may be refer to use [GLab](https://github.com/profclems/glab) or [GitHub CLI](https://github.com/cli/cli)
+> This project has been implemented for PERSONAL USE. If you want more advanced features like creating issue, pull request ... may be refer to use [GLab](https://gitlab.com/gitlab-org/cli) or [GitHub CLI](https://github.com/cli/cli)
 
 ## Prerequisites
 

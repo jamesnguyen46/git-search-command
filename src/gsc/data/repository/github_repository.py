@@ -3,7 +3,7 @@ from gsc.constants import GitHubConstant
 from gsc.data.repository.base_repository import BaseRepository
 from gsc.data.request.github_request import RepositoryRequest, SearchRequest
 from gsc.data.response.github_response import RepositoryResponse, FileResponse
-from gsc.entities.github_model import Repository, File
+from gsc.domain.entities.github_model import Repository, File
 from gsc.core.rx_task import rx_pool_scheduler
 
 

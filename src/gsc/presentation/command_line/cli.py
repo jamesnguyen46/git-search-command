@@ -1,13 +1,10 @@
-import os
 import click
 from tabulate import tabulate
 from gsc import utils
-from gsc.command_line.gitlab_cli import gitlab_cli
-from gsc.command_line.github_cli import github_cli
+from gsc.presentation.command_line.gitlab_cli import gitlab_cli
+from gsc.presentation.command_line.github_cli import github_cli
 
 CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
-
-ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 # pylint: disable=W0613
