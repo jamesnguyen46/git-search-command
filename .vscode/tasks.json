@@ -91,22 +91,6 @@
                 },
                 "problemMatcher": []
             }
-        },
-        {
-            "label": "5. Code coverage",
-            "type": "shell",
-            "command": "source .venv/bin/activate &&  coverage run -m pytest tests",
-            "options": {
-                "cwd": "${workspaceFolder}"
-            },
-            "problemMatcher": [],
-            "windows": {
-                "command": ".\\.venv\\Scripts\\Activate.ps1 ;  coverage run -m pytest tests",
-                "options": {
-                    "cwd": "${workspaceFolder}"
-                },
-                "problemMatcher": []
-            }
         }
     ]
 }

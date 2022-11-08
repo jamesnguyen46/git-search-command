@@ -8,6 +8,7 @@ import types
 from urllib.parse import urljoin
 from requests.adapters import HTTPAdapter
 from urllib3.util import Retry
+from urllib3.exceptions import InsecureRequestWarning
 import requests
 
 
@@ -93,8 +94,17 @@ class RequestDecorator(abc.ABC):
                 respect_retry_after_header=True,
                 status_forcelist=[429, 403],
             )
+
+            # Suppress only the single warning from urllib3 needed.
+            requests.packages.urllib3.disable_warnings(category=InsecureRequestWarning)
+
             session = requests.Session()
             session.mount(self.__object.host, HTTPAdapter(max_retries=retries))
+
+            # Disable SSL verification
+            session.verify = False
+            session.trust_env = False
+
             response = session.request(
                 method=self.method.name.upper(),
                 url=url,
