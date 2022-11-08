@@ -1,7 +1,7 @@
 import abc
 from os.path import join, dirname
 import dotenv
-from gsc.entities.base_model import BaseModel
+from gsc.core.base_model import BaseModel
 
 
 class Env(BaseModel):

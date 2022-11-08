@@ -3,14 +3,14 @@ from dependency_injector.wiring import Provide, inject
 from gsc import utils
 from gsc.di.application_container import ApplicationContainer
 from gsc.constants import GitHubConstant
-from gsc.command_line.env_cli import environment
-from gsc.command_line import keep_main_thread_running
-from gsc.observer.github_observer import (
+from gsc.presentation.command_line.env_cli import environment
+from gsc.presentation.command_line import keep_main_thread_running
+from gsc.presentation.observer.github_observer import (
     GitHubParam,
     GitHubPrintObserver,
 )
 from gsc.config import AppConfig, GitHubConfig
-from gsc.use_cases.github_search_use_case import (
+from gsc.domain.use_cases.github_search_use_case import (
     GitHubSearchRepoUseCase,
     GitHubSearchMultiRepoUseCase,
 )

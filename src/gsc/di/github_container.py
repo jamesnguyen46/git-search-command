@@ -5,7 +5,7 @@ from gsc.data.repository.github_repository import (
     GitHubRepoRepository,
     GitHubSearchRepository,
 )
-from gsc.use_cases.github_search_use_case import (
+from gsc.domain.use_cases.github_search_use_case import (
     GitHubSearchRepoUseCase,
     GitHubSearchMultiRepoUseCase,
 )

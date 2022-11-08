@@ -3,7 +3,7 @@ from gsc.constants import GitLabConstant
 from gsc.data.repository.base_repository import BaseRepository
 from gsc.data.request.gitlab_request import ProjectRequest, SearchRequest
 from gsc.data.response.gitlab_response import ProjectResponse, FileResponse
-from gsc.entities.gitlab_model import Project, File
+from gsc.domain.entities.gitlab_model import Project, File
 
 
 class GitLabProjectRepository(BaseRepository):

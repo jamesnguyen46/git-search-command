@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from gsc.entities.base_model import BaseModel
+from gsc.core.base_model import BaseModel
 
 
 # pylint: disable=R0902
