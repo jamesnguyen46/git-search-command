@@ -80,8 +80,6 @@ def test_gitlab_search_help(runner, arguments):
         "Show code preview.",
         "--ignore-no-result",
         "Do not show the project which has no result (for searching group).",
-        "--disable-ssl",
-        "Disable SSL certificate verification.",
     ]
     result = runner.invoke(cli.app, arguments, terminal_width=500)
     assert result.exit_code == 0
