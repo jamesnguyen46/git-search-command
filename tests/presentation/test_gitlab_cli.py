@@ -265,6 +265,7 @@ def test_gitlab_search_w_keyword_w_project_w_output_ext_file_not_supported(
         "keyword -p 123456 --output ~/Desktop/result.markdown",
     ],
 )
+@pytest.mark.usefixtures("set_up_mock_env")
 def test_gitlab_search_w_keyword_w_project_w_output_valid_value(
     mocker, runner, arguments
 ):
