@@ -41,7 +41,7 @@ def get_project_license():
 
 
 def is_valid_environment_name(name: str):
-    return re.match(r"^[^_-][\w\d_-][^\s\.]*[^_-]$", name)
+    return re.match(r"^[^_-][\w\d_-][^\s\.]*[^_-]$", name) is not None
 
 
 def is_supported_extension_output_file(output_path: str):
