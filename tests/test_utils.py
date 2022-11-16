@@ -64,8 +64,9 @@ def test_get_project_license():
     assert mock_data["License"] in utils.get_project_license()
 
 
-def test_is_valid_environment_name():
-    valid_name = [
+@pytest.mark.parametrize(
+    "env_name",
+    [
         "ValidEnv",
         "valid_env",
         "valid-env",
@@ -73,32 +74,52 @@ def test_is_valid_environment_name():
         "valid_env_123",
         "123-valid-env",
         "0123456789",
-    ]
-    invalid_name = [
+    ],
+)
+def test_environment_name_is_valid(env_name):
+    assert utils.is_valid_environment_name(env_name)
+
+
+@pytest.mark.parametrize(
+    "env_name",
+    [
         "invalid.env",
         "invalid env",
         "!@#$%^&*()",
         "-invalid_env",
         "invalid_env_",
-    ]
-
-    for name in valid_name:
-        assert utils.is_valid_environment_name(name) is not None
-
-    for name in invalid_name:
-        assert utils.is_valid_environment_name(name) is None
+    ],
+)
+def test_environment_name_is_invalid(env_name):
+    assert not utils.is_valid_environment_name(env_name)
 
 
-def test_is_supported_extension_output_file():
-    assert utils.is_supported_extension_output_file("/Users/abc/Desktop/output.md")
-    assert utils.is_supported_extension_output_file(
-        "/Users/abc/Desktop/output.markdown"
-    )
-    assert utils.is_supported_extension_output_file("C:\\Desktop\\output.md")
-    assert utils.is_supported_extension_output_file("C:\\Desktop\\output.markdown")
-    assert not utils.is_supported_extension_output_file(
-        "/Users/abc/Desktop/output.html"
-    )
-    assert not utils.is_supported_extension_output_file("C:\\Desktop\\output.html")
-    assert not utils.is_supported_extension_output_file(".markdown")
-    assert not utils.is_supported_extension_output_file("abcxyz")
+@pytest.mark.parametrize(
+    "file_path",
+    [
+        "/Users/abc/Desktop/output.md",
+        "/Users/abc/Desktop/output.markdown",
+        "C:\\Desktop\\output.md",
+        "C:\\Desktop\\output.markdown",
+    ],
+)
+def test_is_supported_extension_output_file_valid(file_path):
+    assert utils.is_supported_extension_output_file(file_path)
+
+
+@pytest.mark.parametrize(
+    "file_path",
+    [
+        "/Users/abc/Desktop/output.html",
+        "C:\\Desktop\\output.html",
+        ".markdown",
+        "abcxyz",
+    ],
+)
+def test_is_supported_extension_output_file_invalid(file_path):
+    assert not utils.is_supported_extension_output_file(file_path)
+
+
+def test_is_supported_extension_output_file_throw_exception(mocker):
+    mocker.patch("os.path.splitext", return_value=Exception("Error"))
+    assert not utils.is_supported_extension_output_file("/Users/abc/Desktop/output.md")

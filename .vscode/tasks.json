@@ -29,7 +29,7 @@
             }
         },
         {
-            "label": "2. Install PROD virtual environment",
+            "label": "3. Install PROD virtual environment",
             "type": "shell",
             "command": "rm -rf .venv && poetry config virtualenvs.in-project true && poetry install --no-root --no-dev",
             "options": {
@@ -45,7 +45,7 @@
             }
         },
         {
-            "label": "3. Build and install project",
+            "label": "4. Build and install project",
             "type": "shell",
             "command": "source .venv/bin/activate && poetry build && poetry install",
             "options": {
@@ -61,23 +61,7 @@
             }
         },
         {
-            "label": "4. Code clean (all files)",
-            "type": "shell",
-            "command": "source .venv/bin/activate && pre-commit run --verbose --all-files --show-diff-on-failure",
-            "options": {
-                "cwd": "${workspaceFolder}"
-            },
-            "problemMatcher": [],
-            "windows": {
-                "command": ".\\.venv\\Scripts\\Activate.ps1 ; pre-commit run --verbose --all-files --show-diff-on-failure",
-                "options": {
-                    "cwd": "${workspaceFolder}"
-                },
-                "problemMatcher": []
-            }
-        },
-        {
-            "label": "4. Code clean (files have changed)",
+            "label": "5. Code clean (files have changed)",
             "type": "shell",
             "command": "source .venv/bin/activate && pre-commit run --verbose --show-diff-on-failure",
             "options": {
@@ -93,15 +77,47 @@
             }
         },
         {
-            "label": "5. Code coverage",
+            "label": "6. Code clean (all files)",
             "type": "shell",
-            "command": "source .venv/bin/activate &&  coverage run -m pytest tests",
+            "command": "source .venv/bin/activate && pre-commit run --verbose --all-files --show-diff-on-failure",
             "options": {
                 "cwd": "${workspaceFolder}"
             },
             "problemMatcher": [],
             "windows": {
-                "command": ".\\.venv\\Scripts\\Activate.ps1 ;  coverage run -m pytest tests",
+                "command": ".\\.venv\\Scripts\\Activate.ps1 ; pre-commit run --verbose --all-files --show-diff-on-failure",
+                "options": {
+                    "cwd": "${workspaceFolder}"
+                },
+                "problemMatcher": []
+            }
+        },
+        {
+            "label": "7. Unit test",
+            "type": "shell",
+            "command": "source .venv/bin/activate && coverage run -m pytest tests",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [],
+            "windows": {
+                "command": ".\\.venv\\Scripts\\Activate.ps1 ; coverage run -m pytest tests",
+                "options": {
+                    "cwd": "${workspaceFolder}"
+                },
+                "problemMatcher": []
+            }
+        },
+        {
+            "label": "8. Coverage report",
+            "type": "shell",
+            "command": "source .venv/bin/activate && coverage report",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [],
+            "windows": {
+                "command": ".\\.venv\\Scripts\\Activate.ps1 ; coverage report",
                 "options": {
                     "cwd": "${workspaceFolder}"
                 },

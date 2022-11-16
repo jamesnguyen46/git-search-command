@@ -15,38 +15,95 @@ from gsc.domain.use_cases.gitlab_search_use_case import (
     GitLabSearchProjectUseCase,
 )
 
+app_config: AppConfig = Provide[ApplicationContainer.gitlab_module.app_config]
+gitlab_config: GitLabConfig = Provide[ApplicationContainer.gitlab_module.config]
+
 
 @click.group("gl", help=f"Search in {GitLabConstant.NAME} repositories.")
-@click.pass_context
-@inject
-def gitlab_cli(
-    ctx,
-    app_config: AppConfig = Provide[ApplicationContainer.gitlab_module.app_config],
-    config: GitLabConfig = Provide[ApplicationContainer.gitlab_module.config],
-):
-    ctx.obj = [app_config, config]
+def gitlab_cli():
+    pass
 
 
 gitlab_cli.add_command(environment)
 
 
+def __validate_required_keyword_argument(ctx, param, value):
+    if param.name == "keyword" and value is None:
+        click.secho("Usage: gsc gl search [OPTIONS] <keyword>")
+        click.secho("Try 'gsc gl search -h' for help.")
+        click.secho("\n", nl=False)
+        click.secho("Error: Missing required argument <keyword>")
+        ctx.exit(2)
+    return value
+
+
+def __validate_required_project_or_group_option(ctx, _, value):
+    if (
+        value is None
+        and ctx.params.get("group") is None
+        and ctx.params.get("project") is None
+    ):
+        click.secho("Usage: gsc gl search [OPTIONS] <keyword>")
+        click.secho("Try 'gsc gl search -h' for help.")
+        click.secho("\n", nl=False)
+        click.secho("Error: Missing option --project <int> or --group <string>")
+        ctx.exit(2)
+    return value
+
+
+def __validate_session_env_option(ctx, _, value):
+    if not value:
+        click.secho("There is no environment.")
+        click.secho("Try `gsc gl env --new <environment_name>` before searching.")
+        ctx.exit(2)
+    elif not gitlab_config.is_env_existed(value):
+        click.secho(f'"{value}" is not existed in your environment list.')
+        click.secho("Try `gsc gl env --new <environment_name>` before searching.")
+        ctx.exit(2)
+    else:
+        pass
+
+    gitlab_config.set_session_env(value)
+    return value
+
+
+def __validate_output_option(ctx, _, value):
+    if value and not utils.is_supported_extension_output_file(value):
+        click.secho("Usage: gsc gl search [OPTIONS] <keyword>")
+        click.secho("Try 'gsc gl search -h' for help.")
+        click.secho("\n", nl=False)
+        click.secho("Error: Output file type is not supported.")
+        ctx.exit(2)
+
+    return value
+
+
 @gitlab_cli.command(
     "search", help=f"Search the content in {GitLabConstant.NAME} repositories."
 )
-@click.argument("keyword", type=str, metavar="<keyword>")
-@click.option(
-    "-g",
-    "--group",
+@click.argument(
+    "keyword",
     type=str,
-    metavar="<string>",
-    help="Search in the specified project group, input group id or group path.",
+    metavar="<keyword>",
+    required=False,
+    callback=__validate_required_keyword_argument,
 )
 @click.option(
     "-p",
     "--project",
     type=int,
     metavar="<int>",
-    help="Search in the specified project, input project id.",
+    callback=__validate_required_project_or_group_option,
+    help="Search in the specified project, input project id [required at least one of --project and --group].",
+)
+@click.option(
+    "-g",
+    "--group",
+    type=str,
+    metavar="<string>",
+    callback=__validate_required_project_or_group_option,
+    # pylint: disable=C0301
+    help="Search in the specified project group, input group id or group path [required at least one of --project and --group].",
 )
 @click.option(
     "-e",
@@ -54,6 +111,10 @@ gitlab_cli.add_command(environment)
     "session_env",
     type=str,
     metavar="<string>",
+    default=lambda: gitlab_config.get_default_env().name
+    if gitlab_config.get_default_env() is not None
+    else "",
+    callback=__validate_session_env_option,
     help="Select the environment for searching, if not declare, default environment has been used.",
 )
 @click.option(
@@ -61,6 +122,7 @@ gitlab_cli.add_command(environment)
     "--output",
     type=str,
     metavar="<file_path>",
+    callback=__validate_output_option,
     help="Export the search result to markdown file with extension .md or .markdown.",
 )
 @click.option(
@@ -68,6 +130,7 @@ gitlab_cli.add_command(environment)
     "--debug",
     "debug",
     is_flag=True,
+    show_default=True,
     default=False,
     help="Enable debug logging of HTTP request.",
 )
@@ -75,6 +138,7 @@ gitlab_cli.add_command(environment)
     "--code-preview",
     "code_preview",
     is_flag=True,
+    show_default=True,
     default=False,
     help="Show code preview.",
 )
@@ -82,54 +146,29 @@ gitlab_cli.add_command(environment)
     "--ignore-no-result",
     "ignore_no_result",
     is_flag=True,
+    show_default=True,
     default=False,
     help="Do not show the project which has no result (for searching group).",
 )
-@click.pass_context
 @inject
-def search(ctx, **kwargs):
-    app_config = ctx.obj[0]
-    gitlab_config = ctx.obj[1]
-    gitlab_config.set_session_env("")
-    if not gitlab_config.get_default_env():
-        click.secho("There is no environment.")
-        click.secho("Try `gsc gl env --new <environment_name>` before searching.")
-        return
+def search(**kwargs):
+    param = GitLabParam(
+        keyword=kwargs.get("keyword"),
+        env_name=kwargs.get("session_env"),
+        output_path=kwargs.get("output"),
+        project_id=kwargs.get("project"),
+        group=kwargs.get("group"),
+        is_debug=kwargs.get("debug"),
+        code_preview=kwargs.get("code_preview"),
+        ignore_no_result=kwargs.get("ignore_no_result"),
+    )
+    app_config.set_debug(param.is_debug)
 
-    if kwargs.get("keyword"):
-        output_path = kwargs.get("output")
-        if output_path and not utils.is_supported_extension_output_file(output_path):
-            click.secho("Error: Output file type is not supported.")
-            click.secho("Try 'gsc gl search -h' for help.")
-            return
-
-        param = GitLabParam(
-            keyword=kwargs.get("keyword"),
-            output_path=output_path,
-            project_id=kwargs.get("project"),
-            group=kwargs.get("group"),
-            is_debug=kwargs.get("debug"),
-            code_preview=kwargs.get("code_preview"),
-            ignore_no_result=kwargs.get("ignore_no_result"),
-        )
-        app_config.set_debug(param.is_debug)
-
-        session_env = kwargs.get("session_env")
-        if session_env:
-            param.env_name = session_env
-            gitlab_config.set_session_env(session_env)
-        else:
-            default_env = gitlab_config.get_default_env()
-            param.env_name = default_env.name
-            gitlab_config.set_session_env(default_env.name)
-
-        click.clear()
-        if param.input_project:
-            __search_in_project(param)
-        elif param.input_group:
-            __search_in_group(param)
-    else:
-        click.secho(search.get_help(ctx))
+    click.clear()
+    if param.input_project:
+        __search_in_project(param)
+    elif param.input_group:
+        __search_in_group(param)
 
 
 @keep_main_thread_running
