@@ -9,8 +9,8 @@
 A simple tool to search the content in your GitLab project or GitHub repositories.
 
 > This project has been implemented for PERSONAL USE. If you want more advanced features like creating issue, pull request ... may be refer to use [GLab](https://gitlab.com/gitlab-org/cli) or [GitHub CLI](https://github.com/cli/cli)
-
-<p style="font-size:150%; color:blue;">If this project is helpful for you, show your love ❤️ by putting a ⭐ on this project 😉.</p>
+>
+> ## If this project is helpful for you, show your love ❤️ by putting a ⭐ on this project 😉.
 
 ## Prerequisites
 
