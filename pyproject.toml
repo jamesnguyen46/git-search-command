@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "git-search-command"
 version = "0.0.0"
-description = "A simple tool to search the content in the project scope for GitLab and GitHub repositories."
+description = "A simple tool to search the content in GitLab and GitHub."
 authors = ["jamesnguyen46 <thachnguyen1989@gmail.com>"]
 maintainers = ["jamesnguyen46 <thachnguyen1989@gmail.com>"]
 repository = "https://github.com/jamesnguyen46/git-search-command"

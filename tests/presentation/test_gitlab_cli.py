@@ -9,6 +9,8 @@ from gsc.config import GitLabConfig
 from gsc.presentation.command_line import cli, gitlab_cli
 from gsc.di.application_container import ApplicationContainer
 
+REGEX_MISSING_ARGUMENT = r"Error: Option (\'(\-|\-\-).*[a-z]\') requires an argument."
+
 
 @pytest.fixture(scope="module", autouse=True)
 def container():
@@ -37,13 +39,13 @@ def set_up_mock_env(mocker):
 @pytest.mark.parametrize("arguments", ["gl", "gl -h", "gl --help"])
 def test_gitlab_help(runner, arguments):
     expected_msg = [
-        "Search in GitLab repositories.",
+        "Search in GitLab projects.",
         "-h, --help",
         "Show this message and exit.",
         "env",
         "Setup the environment for searching, support multiple environments.",
         "search",
-        "Search the content in GitLab repositories.",
+        "Search the content in GitLab projects.",
     ]
     result = runner.invoke(cli.app, arguments)
     assert result.exit_code == 0
@@ -65,7 +67,7 @@ def test_gitlab_search_wo_keyword(runner):
 def test_gitlab_search_help(runner, arguments):
     # pylint: disable=C0301
     expected_msg = [
-        "Search the content in GitLab repositories.",
+        "Search the content in GitLab projects.",
         "-p, --project <int>",
         "Search in the specified project, input project id [required at least one of --project and --group].",
         "-g, --group <string>",
@@ -147,6 +149,7 @@ def test_gitlab_search_w_keyword_w_group_invalid_value(runner, arguments):
     result = runner.invoke(gitlab_cli.search, arguments)
     assert result.exception
     assert result.exit_code == 2
+    assert re.match(REGEX_MISSING_ARGUMENT, result.output)
 
 
 @pytest.mark.parametrize(
@@ -224,9 +227,7 @@ def test_gitlab_search_w_keyword_w_project_w_output_invalid_value(runner, argume
     result = runner.invoke(gitlab_cli.search, arguments)
     assert result.exception
     assert result.exit_code == 2
-    assert re.match(
-        r"^Error: Option '\-(?:\-output|o)' requires an argument\.$", result.output
-    )
+    assert re.match(REGEX_MISSING_ARGUMENT, result.output)
 
 
 @pytest.mark.parametrize(

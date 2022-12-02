@@ -26,7 +26,7 @@ def set_up_mock_data(mocker):
 @pytest.mark.parametrize("arguments", [[], ["-h"], ["--help"]])
 def test_app_help(runner, arguments):
     expected_msg = [
-        "A simple tool to search the content in the project scope for GitLab and GitHub repositories.",
+        "A simple tool to search the content in GitLab and GitHub.",
         "-i, --info",
         "Show the information of gsc.",
         "-h, --help",
@@ -34,7 +34,7 @@ def test_app_help(runner, arguments):
         "gh",
         "Search in GitHub repositories.",
         "gl",
-        "Search in GitLab repositories.",
+        "Search in GitLab projects.",
     ]
     result = runner.invoke(cli.app, arguments, terminal_width=100)
     assert result.exit_code == 0

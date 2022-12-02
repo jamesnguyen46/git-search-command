@@ -30,7 +30,7 @@ def print_app_info(ctx, param, value):
 @click.group(
     invoke_without_command=True,
     context_settings=CONTEXT_SETTINGS,
-    help="A simple tool to search the content in the project scope for GitLab and GitHub repositories.",
+    help="A simple tool to search the content in GitLab and GitHub.",
 )
 @click.option(
     "-i",
