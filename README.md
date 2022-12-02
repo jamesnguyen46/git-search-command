@@ -9,6 +9,8 @@
 A simple tool to search the content in your GitLab project or GitHub repositories.
 
 > This project has been implemented for PERSONAL USE. If you want more advanced features like creating issue, pull request ... may be refer to use [GLab](https://gitlab.com/gitlab-org/cli) or [GitHub CLI](https://github.com/cli/cli)
+>
+> ## If this project is helpful for you, show your love ❤️ by putting a ⭐ on this project 😉.
 
 ## Prerequisites
 
@@ -34,21 +36,29 @@ gsc gl env --new <environment_name>
 
 Then input your host name and personal token as following
 
-![](./resources/gsc_setup_env.gif)
+![gsc_setup_env](https://user-images.githubusercontent.com/9126025/205210447-517c3fcc-6b5b-4d39-8c4d-aa89e1dc7ecc.gif)
 
 ### Search in GitLab
+
+Default is to search all projects that you owned.
+
+```
+gsc gl search <keywork>
+```
+
+![gsc_gl_search](https://user-images.githubusercontent.com/9126025/205210438-274af890-4dc3-498b-8cc0-a01621d275ab.gif)
+
+Search in a specific project
 
 ```
 gsc gl search <keywork> --project <project_id>
 ```
 
-![](./resources/gsc_gl_search_project.gif)
+Search in a specific group
 
 ```
 gsc gl search <keywork> --group <group_id_or_group_path>
 ```
-
-![](./resources/gsc_gl_search_group.gif)
 
 ### Search in GitHub
 
@@ -58,13 +68,13 @@ Default is to search all repositories that you owned, not fork repository.
 gsc gh search <keywork>
 ```
 
-![](./resources/gsc_gh_search_all.gif)
+![gsc_gh_search](https://user-images.githubusercontent.com/9126025/205210430-1d495ebf-1538-413e-b3af-a60aeb144603.gif)
+
+Search in a specific repository
 
 ```
 gsc gh search <keywork> --repository <repository_full_name>
 ```
-
-![](./resources/gsc_gh_search_repo.gif)
 
 ### See more
 
@@ -72,4 +82,18 @@ Read the [wiki](https://github.com/jamesnguyen46/git-search-command/wiki) for th
 
 ## License
 
-[Apache](https://github.com/jamesnguyen46/git-search-command/blob/main/LICENSE)
+```
+Copyright (C) 2022 James Nguyen
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+```

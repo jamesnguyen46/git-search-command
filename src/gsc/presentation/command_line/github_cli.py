@@ -116,6 +116,7 @@ def __validate_output_option(ctx, _, value):
 def search(**kwargs):
     param = GitHubParam(
         keyword=kwargs.get("keyword"),
+        env_name=kwargs.get("session_env"),
         output_path=kwargs.get("output"),
         repo_name=kwargs.get("repository"),
         is_debug=kwargs.get("debug") or False,
