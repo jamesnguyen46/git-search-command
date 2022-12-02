@@ -80,7 +80,7 @@ def __validate_output_option(ctx, _, value):
     "--project",
     type=int,
     metavar="<int>",
-    help="Search in the specified project, input project id [required at least one of --project and --group].",
+    help="Search in the specified project, input project id.",
 )
 @click.option(
     "-g",
@@ -88,7 +88,7 @@ def __validate_output_option(ctx, _, value):
     type=str,
     metavar="<string>",
     # pylint: disable=C0301
-    help="Search in the specified project group, input group id or group path [required at least one of --project and --group].",
+    help="Search in the specified project group, input group id or group path.",
 )
 @click.option(
     "-e",

@@ -69,9 +69,9 @@ def test_gitlab_search_help(runner, arguments):
     expected_msg = [
         "Search the content in GitLab projects.",
         "-p, --project <int>",
-        "Search in the specified project, input project id [required at least one of --project and --group].",
+        "Search in the specified project, input project id.",
         "-g, --group <string>",
-        "Search in the specified project group, input group id or group path [required at least one of --project and --group].",
+        "Search in the specified project group, input group id or group path.",
         "-e, --environment <string>",
         "Select the environment for searching, if not declare, default environment has been used.",
         "-o, --output <file_path>",
