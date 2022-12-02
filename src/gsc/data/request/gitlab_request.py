@@ -39,6 +39,11 @@ class ProjectRequest(GitLabApi):
         }
 
     @rx_task
+    @get_request_pagination(path="api/v4/projects", response_model=ProjectResponse)
+    def own_project_list(self, limit: int):
+        return None, {"simple": "true", "owned": "true", "per_page": limit}
+
+    @rx_task
     @get_request(path="api/v4/projects/{proj_id}", response_model=ProjectResponse)
     def project_info(self, proj_id: int):
         return {"proj_id": proj_id}, None

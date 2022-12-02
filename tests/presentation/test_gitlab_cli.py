@@ -88,18 +88,6 @@ def test_gitlab_search_help(runner, arguments):
     assert all(x in result.output for x in expected_msg)
 
 
-@pytest.mark.parametrize("arguments", ["keyword", "123456789"])
-def test_gitlab_search_w_keyword_wo_project_or_group(runner, arguments):
-    expected_msg = [
-        "Usage: gsc gl search [OPTIONS] <keyword>",
-        "Try 'gsc gl search -h' for help.",
-        "Error: Missing option --project <int> or --group <string>",
-    ]
-    result = runner.invoke(gitlab_cli.search, arguments)
-    assert result.exit_code == 2
-    assert all(x in result.output for x in expected_msg)
-
-
 @pytest.mark.parametrize(
     "arguments",
     [
@@ -174,18 +162,14 @@ def test_gitlab_search_w_keyword_w_group_valid_value(mocker, runner, arguments):
 @pytest.mark.parametrize(
     "arguments", ["keyword -p 123456 -e", "keyword -p 123456 --environment"]
 )
-def test_gitlab_search_w_keyword_w_project_w_session_env_invalid_value(
-    runner, arguments
-):
+def test_gitlab_search_w_keyword_w_session_env_invalid_value(runner, arguments):
     result = runner.invoke(gitlab_cli.search, arguments)
     assert result.exception
     assert result.exit_code == 2
 
 
 @pytest.mark.parametrize("arguments", ["keyword -p 123456"])
-def test_gitlab_search_w_keyword_w_project_w_session_env_list_no_value(
-    mocker, runner, arguments
-):
+def test_gitlab_search_w_keyword_w_session_env_list_no_value(mocker, runner, arguments):
     expected_msg = [
         "There is no environment.",
         "Try `gsc gl env --new <environment_name>` before searching.",
@@ -203,9 +187,7 @@ def test_gitlab_search_w_keyword_w_project_w_session_env_list_no_value(
         "keyword -p 123456 --environment personal",
     ],
 )
-def test_gitlab_search_w_keyword_w_project_w_session_env_not_existed(
-    mocker, runner, arguments
-):
+def test_gitlab_search_w_keyword_w_session_env_not_existed(mocker, runner, arguments):
     expected_msg = [
         '"personal" is not existed in your environment list.',
         "Try `gsc gl env --new <environment_name>` before searching.",
@@ -223,7 +205,7 @@ def test_gitlab_search_w_keyword_w_project_w_session_env_not_existed(
         "keyword -p 123456 --output",
     ],
 )
-def test_gitlab_search_w_keyword_w_project_w_output_invalid_value(runner, arguments):
+def test_gitlab_search_w_keyword_w_output_invalid_value(runner, arguments):
     result = runner.invoke(gitlab_cli.search, arguments)
     assert result.exception
     assert result.exit_code == 2
@@ -242,9 +224,7 @@ def test_gitlab_search_w_keyword_w_project_w_output_invalid_value(runner, argume
         "keyword -p 123456 --output ~/Desktop/result.txt",
     ],
 )
-def test_gitlab_search_w_keyword_w_project_w_output_ext_file_not_supported(
-    runner, arguments
-):
+def test_gitlab_search_w_keyword_w_output_ext_file_not_supported(runner, arguments):
     expected_msg = [
         "Usage: gsc gl search [OPTIONS] <keyword>",
         "Try 'gsc gl search -h' for help.",
@@ -267,9 +247,7 @@ def test_gitlab_search_w_keyword_w_project_w_output_ext_file_not_supported(
     ],
 )
 @pytest.mark.usefixtures("set_up_mock_env")
-def test_gitlab_search_w_keyword_w_project_w_output_valid_value(
-    mocker, runner, arguments
-):
+def test_gitlab_search_w_keyword_w_output_valid_value(mocker, runner, arguments):
     mock_func = mocker.patch(
         "gsc.presentation.command_line.gitlab_cli.__search_in_project"
     )

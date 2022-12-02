@@ -48,16 +48,32 @@ class GitLabSearchGroupUseCase(BaseUseCase):
         return self._on_searching
 
     def search(self, group_name: str, keyword: str) -> Observable:
-        self._project_repo.project_list(group_name).pipe(
-            ops.group_by(lambda proj: proj),
-            ops.flat_map(
-                lambda group: group.pipe(
-                    ops.observe_on(rx_pool_scheduler),
-                    ops.map(lambda project: self.__search_in_project(project, keyword)),
-                )
-            ),
-            ops.flat_map(lambda item: item),
-        ).subscribe(self._on_searching)
+        if group_name:
+            self._project_repo.project_list(group_name).pipe(
+                ops.group_by(lambda proj: proj),
+                ops.flat_map(
+                    lambda group: group.pipe(
+                        ops.observe_on(rx_pool_scheduler),
+                        ops.map(
+                            lambda project: self.__search_in_project(project, keyword)
+                        ),
+                    )
+                ),
+                ops.flat_map(lambda item: item),
+            ).subscribe(self._on_searching)
+        else:
+            self._project_repo.own_project_list().pipe(
+                ops.group_by(lambda proj: proj),
+                ops.flat_map(
+                    lambda group: group.pipe(
+                        ops.observe_on(rx_pool_scheduler),
+                        ops.map(
+                            lambda project: self.__search_in_project(project, keyword)
+                        ),
+                    )
+                ),
+                ops.flat_map(lambda item: item),
+            ).subscribe(self._on_searching)
 
     def __search_in_project(self, project: Project, keyword: str):
         return combine_latest(

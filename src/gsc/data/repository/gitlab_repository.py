@@ -21,6 +21,11 @@ class GitLabProjectRepository(BaseRepository):
             group_name, GitLabConstant.GROUP_API_LIMIT
         ).pipe(ops.map(self.__project_mapping))
 
+    def own_project_list(self) -> Observable:
+        return self._request.own_project_list(GitLabConstant.GROUP_API_LIMIT).pipe(
+            ops.map(self.__project_mapping)
+        )
+
     def __project_mapping(self, response: ProjectResponse) -> Project:
         return Project(
             id=response.id,
