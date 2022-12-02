@@ -47,7 +47,7 @@ def environment(
     ctx,
     **kwargs,
 ):
-    config = ctx.obj[1]
+    config = ctx.obj[0]
     if kwargs.get("show_list"):
         __show_list_envs(config)
     elif kwargs.get("new"):

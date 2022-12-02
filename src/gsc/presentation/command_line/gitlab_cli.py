@@ -20,8 +20,9 @@ gitlab_config: GitLabConfig = Provide[ApplicationContainer.gitlab_module.config]
 
 
 @click.group("gl", help=f"Search in {GitLabConstant.NAME} projects.")
-def gitlab_cli():
-    pass
+@click.pass_context
+def gitlab_cli(ctx):
+    ctx.obj = [gitlab_config]
 
 
 gitlab_cli.add_command(environment)
