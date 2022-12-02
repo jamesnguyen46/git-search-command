@@ -19,7 +19,7 @@ app_config: AppConfig = Provide[ApplicationContainer.gitlab_module.app_config]
 gitlab_config: GitLabConfig = Provide[ApplicationContainer.gitlab_module.config]
 
 
-@click.group("gl", help=f"Search in {GitLabConstant.NAME} repositories.")
+@click.group("gl", help=f"Search in {GitLabConstant.NAME} projects.")
 def gitlab_cli():
     pass
 
@@ -27,8 +27,8 @@ def gitlab_cli():
 gitlab_cli.add_command(environment)
 
 
-def __validate_required_keyword_argument(ctx, param, value):
-    if param.name == "keyword" and value is None:
+def __validate_required_keyword_argument(ctx, _, value):
+    if value is None:
         click.secho("Usage: gsc gl search [OPTIONS] <keyword>")
         click.secho("Try 'gsc gl search -h' for help.")
         click.secho("\n", nl=False)
@@ -79,7 +79,7 @@ def __validate_output_option(ctx, _, value):
 
 
 @gitlab_cli.command(
-    "search", help=f"Search the content in {GitLabConstant.NAME} repositories."
+    "search", help=f"Search the content in {GitLabConstant.NAME} projects."
 )
 @click.argument(
     "keyword",
@@ -150,7 +150,6 @@ def __validate_output_option(ctx, _, value):
     default=False,
     help="Do not show the project which has no result (for searching group).",
 )
-@inject
 def search(**kwargs):
     param = GitLabParam(
         keyword=kwargs.get("keyword"),

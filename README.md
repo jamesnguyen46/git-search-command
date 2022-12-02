@@ -6,7 +6,7 @@
 [![Github Action](https://img.shields.io/github/workflow/status/jamesnguyen46/git-search-command/Push%20&%20Pull%20Request?label=CI&logo=github-actions&logoColor=white)](https://github.com/jamesnguyen46/git-search-command/actions/workflows/push_pull_request.yml)
 [![License](https://img.shields.io/badge/license-Apache-orange?label=License&logo=apache&logoColor=white)](https://github.com/jamesnguyen46/git-search-command/blob/main/LICENSE)
 
-A simple tool to search the content in files for your GitLab and GitHub repositories.
+A simple tool to search the content in your GitLab project or GitHub repositories.
 
 > This project has been implemented for PERSONAL USE. If you want more advanced features like creating issue, pull request ... may be refer to use [GLab](https://gitlab.com/gitlab-org/cli) or [GitHub CLI](https://github.com/cli/cli)
 
