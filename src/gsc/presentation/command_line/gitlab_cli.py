@@ -37,20 +37,6 @@ def __validate_required_keyword_argument(ctx, _, value):
     return value
 
 
-def __validate_required_project_or_group_option(ctx, _, value):
-    if (
-        value is None
-        and ctx.params.get("group") is None
-        and ctx.params.get("project") is None
-    ):
-        click.secho("Usage: gsc gl search [OPTIONS] <keyword>")
-        click.secho("Try 'gsc gl search -h' for help.")
-        click.secho("\n", nl=False)
-        click.secho("Error: Missing option --project <int> or --group <string>")
-        ctx.exit(2)
-    return value
-
-
 def __validate_session_env_option(ctx, _, value):
     if not value:
         click.secho("There is no environment.")
@@ -93,7 +79,6 @@ def __validate_output_option(ctx, _, value):
     "--project",
     type=int,
     metavar="<int>",
-    callback=__validate_required_project_or_group_option,
     help="Search in the specified project, input project id [required at least one of --project and --group].",
 )
 @click.option(
@@ -101,7 +86,6 @@ def __validate_output_option(ctx, _, value):
     "--group",
     type=str,
     metavar="<string>",
-    callback=__validate_required_project_or_group_option,
     # pylint: disable=C0301
     help="Search in the specified project group, input group id or group path [required at least one of --project and --group].",
 )
@@ -166,7 +150,7 @@ def search(**kwargs):
     click.clear()
     if param.input_project:
         __search_in_project(param)
-    elif param.input_group:
+    else:
         __search_in_group(param)
 
 
