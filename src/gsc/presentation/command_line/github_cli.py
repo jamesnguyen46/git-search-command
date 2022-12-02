@@ -20,8 +20,9 @@ github_config: GitHubConfig = Provide[ApplicationContainer.github_module.config]
 
 
 @click.group("gh", help=f"Search in {GitHubConstant.NAME} repositories.")
-def github_cli():
-    pass
+@click.pass_context
+def github_cli(ctx):
+    ctx.obj = [github_config]
 
 
 github_cli.add_command(environment)
