@@ -20,6 +20,7 @@ class GitLabApi(Api):
                 "Content-Type": "application/json;charset=UTF-8",
                 "PRIVATE-TOKEN": selected_env.private_token,
             },
+            selected_env.verify_ssl_cert,
             app_config.is_debug(),
         )
 

@@ -10,6 +10,7 @@ class Env(BaseModel):
         self.name = kwargs.get("name")
         self.host_name = kwargs.get("host_name")
         self.private_token = kwargs.get("private_token")
+        self.verify_ssl_cert = kwargs.get("verify_ssl_cert")
 
 
 class BaseConfig(abc.ABC):

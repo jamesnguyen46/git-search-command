@@ -8,6 +8,7 @@ import types
 from urllib.parse import urljoin
 from requests.adapters import HTTPAdapter
 from urllib3.util import Retry
+from urllib3.exceptions import InsecureRequestWarning
 import requests
 
 
@@ -70,13 +71,19 @@ class RequestDecorator(abc.ABC):
                 obj.default_header,
                 req_params,
                 json_serialize(req_body),
+                obj.ssl_verify,
             )
             return self.__convert_to_model(self.response_model, response)
 
         return wrapper
 
     def send(
-        self, url: str, headers: dict = None, params: dict = None, data: dict = None
+        self,
+        url: str,
+        headers: dict = None,
+        params: dict = None,
+        data: dict = None,
+        ssl_verify=True,
     ):
         req_header = self.headers
         if req_header is not None and headers is not None:
@@ -93,8 +100,16 @@ class RequestDecorator(abc.ABC):
                 respect_retry_after_header=True,
                 status_forcelist=[429, 403],
             )
+
+            if not ssl_verify:
+                # Suppress only the single warning from urllib3 needed.
+                requests.packages.urllib3.disable_warnings(
+                    category=InsecureRequestWarning
+                )
+
             session = requests.Session()
             session.mount(self.__object.host, HTTPAdapter(max_retries=retries))
+            session.verify = ssl_verify
             response = session.request(
                 method=self.method.name.upper(),
                 url=url,
@@ -164,9 +179,12 @@ class RequestDecorator(abc.ABC):
 
 
 class Api:
-    def __init__(self, host: str, default_header: dict = None, is_debug=False):
+    def __init__(
+        self, host: str, default_header: dict = None, ssl_verify=True, is_debug=False
+    ):
         self.host = host
         self.default_header = default_header
+        self.ssl_verify = ssl_verify
         self.is_debug = is_debug
 
 
@@ -178,15 +196,21 @@ class GetRequest(RequestDecorator):
 
 
 class GetRequestPagination(GetRequest):
+    # pylint: disable=too-many-arguments
     def send(
-        self, url: str, headers: dict = None, params: dict = None, data: dict = None
+        self,
+        url: str,
+        headers: dict = None,
+        params: dict = None,
+        data: dict = None,
+        ssl_verify=True,
     ):
         _url = url
         while True:
             if _url == url:
-                response = super().send(url, headers, params, data)
+                response = super().send(url, headers, params, data, ssl_verify)
             else:
-                response = super().send(_url, headers)
+                response = super().send(_url, headers, ssl_verify=ssl_verify)
 
             yield response
 
