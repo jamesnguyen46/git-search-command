@@ -21,6 +21,7 @@ class GitHubApi(Api):
                 "Accept": "application/vnd.github.v3+json",
                 "Authorization": f"token {selected_env.private_token}",
             },
+            selected_env.verify_ssl_cert,
             app_config.is_debug(),
         )
 

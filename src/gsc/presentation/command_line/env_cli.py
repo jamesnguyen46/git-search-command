@@ -87,13 +87,18 @@ def __create_new_environment(config: EnvConfig, name: str):
 
     new_env = Env(name=name)
 
-    host = click.prompt(f'Please input host name for "{name}" environment ', type=str)
+    host = click.prompt("Please input host name", type=str)
     if host:
         new_env.host_name = host
 
-    token = click.prompt(f'Please input token for "{name}" environment ', type=str)
+    token = click.prompt("Please input token", type=str)
     if token:
         new_env.private_token = token
+
+    verify_ssl_cert = click.confirm(
+        "Enable SSL certificate verification? (default: Y)", default=True, abort=False
+    )
+    new_env.verify_ssl_cert = verify_ssl_cert
 
     config.set_env(new_env)
 
@@ -109,8 +114,9 @@ def __show_detail_environment(config: EnvConfig, name: str):
 
     environ = config.get_env(name)
     click.secho(f'"{name}" environment :')
-    click.secho(f"Host name : {environ.host_name}")
-    click.secho(f"Private token : {environ.private_token}")
+    click.secho(f"- Host name : {environ.host_name}")
+    click.secho(f"- Private token : {environ.private_token}")
+    click.secho(f"- SSL certificate verification : {environ.verify_ssl_cert}")
 
 
 def __set_default_environment(config: EnvConfig, env_name: str):
