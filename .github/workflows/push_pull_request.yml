@@ -26,7 +26,7 @@ jobs:
         python -m pip install --upgrade pip pre-commit
     - name: Load cached hooks of pre-commit
       id: cached-pre-commit
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ~/.cache/pre-commit
         key: ${{ runner.os }}-pre-commit-${{ hashFiles('.pre-commit-config.yaml') }}
@@ -54,7 +54,7 @@ jobs:
         poetry config installer.parallel true
     - name: Load cached venv
       id: cached-poetry-dependencies
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: .venv
         key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
@@ -100,7 +100,7 @@ jobs:
         poetry config repositories.testpypi ${{ secrets.TEST_PYPI_UPLOAD_URL }}
     - name: Load cached venv
       id: cached-poetry-dependencies
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: .venv
         key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
